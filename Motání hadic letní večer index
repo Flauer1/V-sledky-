@@ -134,6 +134,14 @@ Importovat soutěžící
 
 <div class="section">
 
+<div id="statistika"
+style="
+margin-bottom:15px;
+font-size:18px;
+font-weight:bold;
+">
+</div>
+
 <div id="obsah"></div>
 
 </div>
@@ -293,7 +301,34 @@ if(c.length!=2) return 999999;
 return parseInt(c[0])*100+parseInt(c[1]);
 
 }
+function statistika(){
 
+let pocet=zavodnici.length;
+
+let pokusy=0;
+
+let nej="";
+
+zavodnici.forEach(z=>{
+
+pokusy+=z.pokusy.length;
+
+if(z.nejlepsi!=""){
+
+if(nej=="" || casNaCislo(z.nejlepsi)<casNaCislo(nej)){
+nej=z.nejlepsi;
+}
+
+}
+
+});
+
+document.getElementById("statistika").innerHTML=
+"👥 Soutěžících: "+pocet+
+" | 🎯 Pokusů: "+pokusy+
+" | 🥇 Nejlepší čas: "+(nej||"-");
+
+}
 function prepocet(){
 
 zavodnici.forEach(z=>{
@@ -336,6 +371,7 @@ z.poradi=i+1;
 });
 
 vykresli();
+statistika();
 
 }
 </script>
