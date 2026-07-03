@@ -229,18 +229,28 @@ ${z.nejlepsi || "-"}
 
 <small>
 
-${z.pokusy.map(c=>{
+${z.pokusy.map((c,index)=>{
+
+let text = c;
 
 if(c==z.nejlepsi){
-
-return `<span style="color:green;font-weight:bold;">${c}</span>`;
-
+text = `<span style="color:green;font-weight:bold;">${c}</span>`;
 }
 
-return c;
+return `
+${text}
+<button
+onclick="smazPokus(${i},${index})"
+style="
+margin-left:4px;
+padding:1px 5px;
+font-size:11px;
+">
+❌
+</button>
+`;
 
 }).join(" | ")}
-
 </small>
 
 </td>
@@ -287,7 +297,15 @@ const cas=prompt("Zadej čas (např. 20:13)");
 if(!cas) return;
 
 zavodnici[index].pokusy.push(cas);
+function smazPokus(zavodnik,pokus){
 
+if(!confirm("Smazat tento pokus?")) return;
+
+zavodnici[zavodnik].pokusy.splice(pokus,1);
+
+prepocet();
+
+}
 prepocet();
 
 }
