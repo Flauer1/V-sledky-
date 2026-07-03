@@ -4,40 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Motání hadic na čas</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
 
-    <h1>Motání hadic na čas</h1>
+    <h1>🧯 Motání hadic na čas</h1>
 
     <div id="cas">00:00.00</div>
 
-    <div class="tlacitka">
+    <div class="buttons">
         <button id="start">START</button>
         <button id="stop">STOP</button>
         <button id="reset">RESET</button>
-<button id="smazat">Smazat výsledky</button>
+        <button id="save">ULOŽIT ČAS</button>
+        <button id="clear">SMAZAT VŠE</button>
     </div>
 
-    <h2>Nejlepší čas</h2>
-    <div id="rekord">--:--.--</div>
+    <div class="info">
 
-    <h2>Výsledky</h2>
+        <div class="box">
+            <h3>Nejlepší čas</h3>
+            <div id="bestTime">--:--.--</div>
+        </div>
 
-    <table>
+        <div class="box">
+            <h3>Počet pokusů</h3>
+            <div id="count">0</div>
+        </div>
+
+        <div class="box">
+            <h3>Průměr</h3>
+            <div id="average">--:--.--</div>
+        </div>
+
+    </div>
+
+    <table id="table">
         <thead>
             <tr>
-                <th>Pořadí</th>
+                <th>#</th>
                 <th>Čas</th>
+                <th>Datum</th>
             </tr>
         </thead>
 
-        <tbody id="vysledky">
+        <tbody id="results"></tbody>
 
-        </tbody>
     </table>
 
 </div>
@@ -53,18 +67,18 @@
 }
 
 body{
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f2f2f2;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#ececec;
     padding:20px;
 }
 
 .container{
-    max-width:700px;
+    max-width:900px;
     margin:auto;
-    background:#ffffff;
+    background:#fff;
+    border-radius:12px;
     padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.2);
+    box-shadow:0 0 15px rgba(0,0,0,.15);
 }
 
 h1{
@@ -74,48 +88,63 @@ h1{
 
 #cas{
     text-align:center;
-    font-size:60px;
+    font-size:64px;
     font-weight:bold;
-    margin:20px 0;
+    margin:25px 0;
+    color:#222;
 }
 
-#rekord{
-    text-align:center;
-    font-size:36px;
-    color:#0b7a0b;
-    font-weight:bold;
-    margin:15px 0 30px;
-}
-
-.tlacitka{
+.buttons{
     display:flex;
-    justify-content:center;
-    gap:15px;
-    margin-bottom:30px;
     flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:25px;
 }
 
 button{
-    padding:12px 25px;
-    font-size:18px;
-    cursor:pointer;
+    padding:12px 20px;
+    font-size:17px;
     border:none;
     border-radius:8px;
+    cursor:pointer;
+    transition:.2s;
 }
 
-#start{
-    background:#28a745;
-    color:white;
+button:hover{
+    transform:scale(1.05);
 }
 
-#stop{
-    background:#dc3545;
-    color:white;
+#start{background:#28a745;color:#fff;}
+#stop{background:#dc3545;color:#fff;}
+#reset{background:#007bff;color:#fff;}
+#save{background:#ff9800;color:#fff;}
+#clear{background:#555;color:#fff;}
+
+.info{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+    margin-bottom:25px;
 }
 
-#reset{
-    background:#007bff;
-    color:white;
+.box{
+    background:#f7f7f7;
+    border-radius:10px;
+    padding:15px;
+    text-align:center;
+    border:1px solid #ddd;
+}
+
+.box h3{
+    margin-bottom:10px;
+    font-size:18px;
+}
+
+.box div{
+    font-size:28px;
+    font-weight:bold;
+    color:#0b7a0b;
 }
 
 table{
@@ -123,238 +152,57 @@ table{
     border-collapse:collapse;
 }
 
-th,
-td{
+th,td{
     border:1px solid #ccc;
-    padding:10
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#efefef;
+}
+
+tr:nth-child(even){
+    background:#fafafa;
+}
+
+.best{
+    background:#d4edda !important;
+    font-weight:bold;
+}
+
+@media(max-width:700px){
+
+    #cas{
+        font-size:46px;
+    }
+
+    button{
+        width:100%;
+    }
+
+}
 const cas = document.getElementById("cas");
-const rekord = document.getElementById("rekord");
-const vysledky = document.getElementById("vysledky");
 
 const start = document.getElementById("start");
 const stop = document.getElementById("stop");
 const reset = document.getElementById("reset");
+const save = document.getElementById("save");
+const clear = document.getElementById("clear");
 
-let startCas = 0;
-let uplynulyCas = 0;
-let interval = null;
-let bezi = false;
+const bestTime = document.getElementById("bestTime");
+const count = document.getElementById("count");
+const average = document.getElementById("average");
+const results = document.getElementById("results");
 
-let seznamCasu = [];
+let startTime = 0;
+let elapsedTime = 0;
+let timer = null;
+let running = false;
+
+let records = [];
 
 cas.textContent = "00:00.00";
-rekord.textContent = "--:--.--";
-function zobrazCas() {
-
-    let minuty = Math.floor(uplynulyCas / 60000);
-    let sekundy = Math.floor((uplynulyCas % 60000) / 1000);
-    let setiny = Math.floor((uplynulyCas % 1000) / 10);
-
-    let text =
-        String(minuty).padStart(2, "0") + ":" +
-        String(sekundy).padStart(2, "0") + "." +
-        String(setiny).padStart(2, "0");
-
-    cas.textContent = text;
-
-}
-start.addEventListener("click", function () {
-
-    if (bezi) return;
-
-    startCas = Date.now() - uplynulyCas;
-
-    interval = setInterval(function () {
-
-        uplynulyCas = Date.now() - startCas;
-
-        zobrazCas();
-
-    }, 10);
-
-    bezi = true;
-
-});
-stop.addEventListener("click", function () {
-
-    if (!bezi) return;
-
-    clearInterval(interval);
-
-    bezi = false;
-
-    seznamCasu.push(cas.textContent);
-
-    const radek = document.createElement("tr");
-
-    radek.innerHTML = `
-        <td>${seznamCasu.length}</td>
-        <td>${cas.textContent}</td>
-    `;
-
-    vysledky.appendChild(radek);
-
-});
-reset.addEventListener("click", function () {
-
-    clearInterval(interval);
-
-    bezi = false;
-
-    uplynulyCas = 0;
-
-    startCas = 0;
-
-    zobrazCas();
-
-});
-function aktualizujRekord() {
-
-    if (seznamCasu.length === 0) {
-
-        rekord.textContent = "--:--.--";
-        return;
-
-    }
-
-    let nejlepsi = seznamCasu[0];
-
-    for (let i = 1; i < seznamCasu.length; i++) {
-
-        if (seznamCasu[i] < nejlepsi) {
-
-            nejlepsi = seznamCasu[i];
-
-        }
-
-    }
-
-    rekord.textContent = nejlepsi;
-
-}
-function ulozData() {
-
-    localStorage.setItem(
-        "motaniHadic",
-        JSON.stringify(seznamCasu)
-    );
-
-}
-setInterval(function () {
-
-    ulozData();
-
-}, 1000);
-function nactiData() {
-
-    const data = localStorage.getItem("motaniHadic");
-
-    if (data === null) return;
-
-    seznamCasu = JSON.parse(data);
-
-    vysledky.innerHTML = "";
-
-    seznamCasu.forEach(function(casText, index) {
-
-        const radek = document.createElement("tr");
-
-        radek.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${casText}</td>
-        `;
-
-        vysledky.appendChild(radek);
-
-    });
-
-    aktualizujRekord();
-
-}
-
-nactiData();
-const smazat = document.getElementById("smazat");
-
-smazat.addEventListener("click", function () {
-
-    if (!confirm("Opravdu chceš smazat všechny výsledky?")) {
-        return;
-    }
-
-    seznamCasu = [];
-
-    vysledky.innerHTML = "";
-
-    rekord.textContent = "--:--.--";
-
-    localStorage.removeItem("motaniHadic");
-
-});
-function casNaSetiny(casText) {
-
-    const casti = casText.split(":");
-    const sekundy = casti[1].split(".");
-
-    const minuty = parseInt(casti[0], 10);
-    const sec = parseInt(sekundy[0], 10);
-    const setiny = parseInt(sekundy[1], 10);
-
-    return (minuty * 6000) + (sec * 100) + setiny;
-
-}
-
-function seradVysledky() {
-
-    seznamCasu.sort(function(a, b) {
-        return casNaSetiny(a) - casNaSetiny(b);
-    });
-
-    vysledky.innerHTML = "";
-
-    seznamCasu.forEach(function(casText, index) {
-
-        const radek = document.createElement("tr");
-
-        radek.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${casText}</td>
-        `;
-
-        vysledky.appendChild(radek);
-
-    });
-
-    aktualizujRekord();
-    ulozData();
-
-}
-setInterval(function () {
-
-    if (seznamCasu.length > 1) {
-        seradVysledky();
-    }
-
-}, 500);
-.nejlepsi{
-    background:#c8f7c5;
-    font-weight:bold;
-    color:#0b7a0b;
-}
-function zvyrazniNejlepsi() {
-
-    const radky = vysledky.querySelectorAll("tr");
-
-    radky.forEach(function(radek) {
-        radek.classList.remove("nejlepsi");
-    });
-
-    if (radky.length > 0) {
-        radky[0].classList.add("nejlepsi");
-    }
-
-}
-setInterval(function () {
-
-    zvyrazniNejlepsi();
-
-}, 500);
+bestTime.textContent = "--:--.--";
+count.textContent = "0";
+average.textContent = "--:--.--";
