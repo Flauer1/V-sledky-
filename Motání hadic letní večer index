@@ -1,1 +1,332 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Motání hadic - Letní večer</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+background:#eef2f7;
+margin:20px;
+}
+
+.section{
+background:white;
+padding:15px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+
+h1{
+text-align:center;
+margin-bottom:5px;
+}
+
+h2{
+text-align:center;
+color:#666;
+margin-top:0;
+}
+
+button{
+padding:10px 16px;
+font-size:16px;
+margin:4px;
+cursor:pointer;
+border-radius:8px;
+}
+
+textarea{
+width:100%;
+height:140px;
+margin-top:10px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+background:white;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:6px;
+text-align:center;
+}
+
+th{
+background:#dbeafe;
+}
+
+input{
+padding:5px;
+width:80px;
+}
+
+.poradi1{
+background:#ffd700;
+font-weight:bold;
+}
+
+.poradi2{
+background:#d9d9d9;
+font-weight:bold;
+}
+
+.poradi3{
+background:#f4b183;
+font-weight:bold;
+}
+
+.nejlepsi{
+background:#b6ffb6;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="section">
+
+<h1>🚒 Letní večer</h1>
+
+<h2>SDH Lubina II Větřkovice</h2>
+
+<h2>18. 7. 2026</h2>
+
+</div>
+
+<div class="section">
+
+<h3>Import soutěžících</h3>
+
+<p>Každý řádek = Jméno Příjmení</p>
+
+<textarea id="import"></textarea>
+
+<br>
+
+<button onclick="importuj()">
+Importovat soutěžící
+</button>
+
+<button onclick="exportDat()">
+📤 Export
+</button>
+
+<input type="file" id="soubor">
+
+<button onclick="importDat()">
+📥 Import
+</button>
+
+</div>
+
+<div class="section">
+
+<div id="obsah"></div>
+
+</div>
+
+<script>
+
+let zavodnici=[];
+function importuj(){
+
+const text=document.getElementById("import").value;
+
+const radky=text.split("\n");
+
+radky.forEach(radek=>{
+
+if(radek.trim()=="") return;
+
+const casti=radek.trim().split(" ");
+
+const prijmeni=casti.pop();
+
+const jmeno=casti.join(" ");
+
+zavodnici.push({
+
+jmeno,
+prijmeni,
+
+pokusy:[],
+
+nejlepsi:"",
+
+poradi:""
+
+});
+
+});
+
+vykresli();
+
+}
+function vykresli(){
+
+let html=`
+<table>
+
+<tr>
+
+<th>Pořadí</th>
+
+<th>Jméno</th>
+
+<th>Příjmení</th>
+
+<th>Nejlepší čas</th>
+
+<th>Pokusy</th>
+
+<th>Akce</th>
+
+</tr>
+`;
+
+zavodnici.forEach((z,i)=>{
+
+html+=`
+
+<tr>
+
+<td>${z.poradi}</td>
+
+<td>${z.jmeno}</td>
+
+<td>${z.prijmeni}</td>
+
+<td>${z.nejlepsi}</td>
+
+<td>
+
+<button onclick="novyPokus(${i})">
+➕
+</button>
+
+<br><br>
+
+${z.pokusy.map(c=>{
+
+if(c==z.nejlepsi){
+
+return `<span class="nejlepsi">${c}</span>`;
+
+}
+
+return c;
+
+}).join("<br>")}
+
+</td>
+
+<td>
+
+<button onclick="
+
+zavodnici.splice(${i},1);
+
+vykresli();
+
+">
+
+🗑️
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+html+="</table>";
+
+document.getElementById("obsah").innerHTML=html;
+
+}
+function novyPokus(index){
+
+const cas=prompt("Zadej čas (např. 20:13)");
+
+if(!cas) return;
+
+zavodnici[index].pokusy.push(cas);
+
+prepocet();
+
+}
+
+function casNaCislo(cas){
+
+const c=cas.split(":");
+
+if(c.length!=2) return 999999;
+
+return parseInt(c[0])*100+parseInt(c[1]);
+
+}
+
+function prepocet(){
+
+zavodnici.forEach(z=>{
+
+if(z.pokusy.length==0){
+
+z.nejlepsi="";
+return;
+
+}
+
+let nej=z.pokusy[0];
+
+z.pokusy.forEach(c=>{
+
+if(casNaCislo(c)<casNaCislo(nej)){
+
+nej=c;
+
+}
+
+});
+
+z.nejlepsi=nej;
+
+});
+
+const serazene=zavodnici
+.filter(z=>z.nejlepsi!="")
+.slice();
+
+serazene.sort((a,b)=>
+casNaCislo(a.nejlepsi)-casNaCislo(b.nejlepsi)
+);
+
+serazene.forEach((z,i)=>{
+
+z.poradi=i+1;
+
+});
+
+vykresli();
+
+}
+</script>
+
+</body>
+</html>
