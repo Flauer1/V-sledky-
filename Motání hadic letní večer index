@@ -190,7 +190,7 @@ let html=`
 
 <th>Nejlepší čas</th>
 
-<th>Pokusy</th>
+<th>Akce</th>
 
 <th>Akce</th>
 
@@ -209,27 +209,39 @@ html+=`
 
 <td>${z.prijmeni}</td>
 
-<td>${z.nejlepsi}</td>
-
 <td>
 
-<button onclick="novyPokus(${i})">
-➕
-</button>
+<div class="nejlepsi">
 
-<br><br>
+${z.nejlepsi || "-"}
+
+</div>
+
+<br>
+
+<small>
 
 ${z.pokusy.map(c=>{
 
 if(c==z.nejlepsi){
 
-return `<span class="nejlepsi">${c}</span>`;
+return `<span style="color:green;font-weight:bold;">${c}</span>`;
 
 }
 
 return c;
 
-}).join("<br>")}
+}).join(" | ")}
+
+</small>
+
+</td>
+
+<td>
+
+<button onclick="novyPokus(${i})">
+➕ Přidat pokus
+</button>
 
 </td>
 
