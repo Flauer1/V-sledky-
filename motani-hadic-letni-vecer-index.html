@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,96 +10,179 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#ececec;
-padding:20px;
+    background:#ececec;
+    padding:20px;
 }
 
 .container{
-max-width:1200px;
-margin:auto;
-background:#fff;
-padding:25px;
-border-radius:10px;
-box-shadow:0 0 15px rgba(0,0,0,.15);
+    max-width:1400px;
+    margin:auto;
+    background:#ffffff;
+    border-radius:12px;
+    padding:25px;
+    box-shadow:0 0 20px rgba(0,0,0,.15);
 }
 
-h1{
-text-align:center;
-color:#c62828;
-margin-bottom:5px;
+header{
+    text-align:center;
+    margin-bottom:30px;
 }
 
-h2{
-text-align:center;
-color:#666;
-margin-bottom:30px;
+header h1{
+    color:#c62828;
+    font-size:34px;
+    margin-bottom:8px;
 }
 
-h3{
-margin:25px 0 15px;
+header h2{
+    color:#666;
+    font-size:20px;
+    font-weight:normal;
+}
+
+.card{
+
+    background:#fafafa;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:20px;
+    margin-bottom:25px;
+
+}
+
+.card h3{
+
+    color:#c62828;
+    margin-bottom:20px;
+
 }
 
 .form-group{
-margin-bottom:15px;
+
+    margin-bottom:15px;
+
 }
 
 label{
-display:block;
-font-weight:bold;
-margin-bottom:5px;
+
+    display:block;
+    font-weight:bold;
+    margin-bottom:6px;
+
 }
 
 input{
-width:100%;
-padding:10px;
-font-size:16px;
-border:1px solid #ccc;
-border-radius:5px;
+
+    width:100%;
+    padding:10px;
+    border:1px solid #bbb;
+    border-radius:5px;
+    font-size:16px;
+
 }
 
 .buttons{
-margin-top:20px;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:20px;
+
 }
 
 button{
-padding:10px 20px;
-background:#2e7d32;
-color:white;
-border:none;
-border-radius:5px;
-cursor:pointer;
+
+    border:none;
+    border-radius:5px;
+    padding:10px 18px;
+    cursor:pointer;
+    color:white;
+    font-size:15px;
+
 }
 
-button:hover{
-opacity:.9;
+#pridatPokus{
+
+    background:#1976d2;
+
+}
+
+#ulozit{
+
+    background:#2e7d32;
+
+}
+
+#export{
+
+    background:#ef6c00;
+
+}
+
+#import{
+
+    background:#6a1b9a;
+
+}
+
+#qr{
+
+    background:#455a64;
+
 }
 
 table{
-width:100%;
-border-collapse:collapse;
-margin-top:25px;
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+
 }
 
 th{
-background:#c62828;
-color:white;
-padding:10px;
+
+    background:#c62828;
+    color:white;
+    padding:10px;
+
 }
 
 td{
-border:1px solid #ddd;
-padding:8px;
-text-align:center;
+
+    border:1px solid #ddd;
+    padding:8px;
+    text-align:center;
+
+}
+
+tr:nth-child(even){
+
+    background:#f8f8f8;
+
+}
+
+.nejlepsi{
+
+    background:#c8e6c9;
+    font-weight:bold;
+
+}
+
+@media(max-width:900px){
+
+    .buttons{
+
+        flex-direction:column;
+
+    }
+
 }
 
 </style>
@@ -109,8 +193,15 @@ text-align:center;
 
 <div class="container">
 
+<header>
+
 <h1>🚒 Letní večer SDH Lubina II Větřkovice</h1>
-<h2>18. 7. 2026</h2>
+
+<h2>18. července 2026</h2>
+
+</header>
+
+<div class="card">
 
 <h3>Přidání soutěžícího</h3>
 
@@ -136,7 +227,12 @@ text-align:center;
 
 <label>Čas 1. pokusu</label>
 
-<input class="cas">
+<input
+class="cas"
+type="number"
+step="0.01"
+min="0"
+placeholder="15.23">
 
 </div>
 
@@ -144,16 +240,50 @@ text-align:center;
 
 <div class="buttons">
 
-<button id="pridatPokus" type="button">
+<button
+id="pridatPokus"
+type="button">
+
 ➕ Přidat další pokus
+
 </button>
 
-<button id="ulozit" type="button">
+<button
+id="ulozit"
+type="button">
+
 💾 Přidat soutěžícího
+
 </button>
 
 </div>
-<h3>Seznam soutěžících</h3>
+
+</div>
+<div class="card">
+
+<h3>📊 Statistiky</h3>
+
+<p><b>Soutěžících:</b>
+<span id="statSoutezicich">0</span></p>
+
+<p><b>Počet pokusů:</b>
+<span id="statPokusu">0</span></p>
+
+<p><b>Nejlepší čas:</b>
+<span id="statNejlepsi">-</span></p>
+
+<br>
+
+<input
+type="text"
+id="vyhledavani"
+placeholder="🔍 Vyhledat soutěžícího...">
+
+</div>
+
+<div class="card">
+
+<h3>🏆 Výsledky soutěže</h3>
 
 <table id="tabulka">
 
@@ -161,12 +291,29 @@ text-align:center;
 
 <tr>
 
-<th width="50">#</th>
-<th>Příjmení</th>
-<th>Jméno</th>
-<th width="300">Pokusy</th>
-<th width="130">Nejlepší čas</th>
-<th width="90">Akce</th>
+<th width="60">
+Pořadí
+</th>
+
+<th>
+Příjmení
+</th>
+
+<th>
+Jméno
+</th>
+
+<th width="300">
+Pokusy
+</th>
+
+<th width="120">
+Nejlepší čas
+</th>
+
+<th width="180">
+Akce
+</th>
 
 </tr>
 
@@ -178,15 +325,55 @@ text-align:center;
 
 </table>
 
+<div class="buttons">
+
+<button
+id="export"
+type="button">
+
+📤 Export
+
+</button>
+
+<button
+id="import"
+type="button">
+
+📥 Import
+
+</button>
+
+<button
+id="qr"
+type="button">
+
+📱 QR výsledky
+
+</button>
+
+</div>
+
 </div>
 
 <script>
 
-let poradi = 1;
+/**************************************************
 
-let pocetPokusu = 1;
+MOTÁNÍ HADIC NA ČAS
+Verze 1.0
 
-let soutezici = [];
+**************************************************/
+
+let soutezici=[];
+
+let dalsiId=1;
+
+let pocetPokusu=1;
+
+
+/**************************************************
+PŘIDÁNÍ DALŠÍHO POKUSU
+**************************************************/
 
 document
 .getElementById("pridatPokus")
@@ -194,14 +381,22 @@ document
 
     pocetPokusu++;
 
-    const blok = document.createElement("div");
+    const blok=document.createElement("div");
 
-    blok.className = "form-group";
+    blok.className="form-group";
 
-    blok.innerHTML = `
-        <label>Čas ${pocetPokusu}. pokusu</label>
-        <input class="cas">
-    `;
+    blok.innerHTML=`
+
+<label>Čas ${pocetPokusu}. pokusu</label>
+
+<input
+class="cas"
+type="number"
+step="0.01"
+min="0"
+placeholder="15.23">
+
+`;
 
     document
     .getElementById("pokusy")
@@ -209,146 +404,328 @@ document
 
 });
 
+
+/**************************************************
+PŘIDÁNÍ SOUTĚŽÍCÍHO
+**************************************************/
+
 document
 .getElementById("ulozit")
-.addEventListener("click",ulozitSouteziciho);
+.addEventListener("click",pridatSouteziciho);
 
-function ulozitSouteziciho(){
 
-    const prijmeni =
-    document.getElementById("prijmeni").value.trim();
+function pridatSouteziciho(){
 
-    const jmeno =
-    document.getElementById("jmeno").value.trim();
+const prijmeni=
+document
+.getElementById("prijmeni")
+.value
+.trim();
 
-    if(prijmeni==="" || jmeno===""){
+const jmeno=
+document
+.getElementById("jmeno")
+.value
+.trim();
 
-        alert("Vyplň příjmení a jméno.");
+if(prijmeni=="" || jmeno==""){
 
-        return;
+alert("Vyplň příjmení a jméno.");
 
-    }
-
-    const pokusy = [];
-
-    document
-    .querySelectorAll(".cas")
-    .forEach(function(pole){
-
-        const cas = pole.value.trim();
-
-        if(cas!==""){
-
-            pokusy.push(cas);
-
-        }
-
-    });
-
-    if(pokusy.length===0){
-
-        alert("Zadej alespoň jeden čas.");
-
-        return;
-
-    }
-    let nejlepsi = pokusy[0];
-
-    pokusy.forEach(function(cas){
-
-        if(
-            parseFloat(cas.replace(",", ".")) <
-            parseFloat(nejlepsi.replace(",", "."))
-        ){
-            nejlepsi = cas;
-        }
-
-    });
-
-    soutezici.push({
-
-        poradi: poradi,
-        prijmeni: prijmeni,
-        jmeno: jmeno,
-        pokusy: pokusy,
-        nejlepsi: nejlepsi
-
-    });
-
-    vykresliTabulku();
-
-    poradi++;
-
-    document.getElementById("prijmeni").value="";
-    document.getElementById("jmeno").value="";
-
-    document.getElementById("pokusy").innerHTML=`
-        <div class="form-group">
-            <label>Čas 1. pokusu</label>
-            <input class="cas">
-        </div>
-    `;
-
-    pocetPokusu=1;
-
-    document.getElementById("prijmeni").focus();
+return;
 
 }
 
+const pokusy=[];
+
+document
+.querySelectorAll(".cas")
+.forEach(function(pole){
+
+const hodnota=
+pole.value.trim();
+
+if(hodnota!=""){
+
+pokusy.push(parseFloat(hodnota));
+
+}
+
+});
+
+if(pokusy.length==0){
+
+alert("Zadej alespoň jeden čas.");
+
+return;
+
+}
+
+const nejlepsi=
+Math.min(...pokusy);
+
+soutezici.push({
+
+id:dalsiId++,
+
+prijmeni:prijmeni,
+
+jmeno:jmeno,
+
+pokusy:pokusy,
+
+nejlepsi:nejlepsi
+
+});
+
+vykresliTabulku();
+
+obnovStatistiky();
+
+vycistitFormular();
+
+ulozitData();
+
+}
+    /**************************************************
+VYKRESLENÍ TABULKY
+**************************************************/
+
 function vykresliTabulku(){
 
-    const tbody =
-    document.getElementById("vysledky");
+const tbody=document.getElementById("vysledky");
 
-    tbody.innerHTML="";
+tbody.innerHTML="";
 
-    soutezici.forEach(function(zavodnik,index){
+soutezici.sort(function(a,b){
 
-        const radek =
-        document.createElement("tr");
+return a.nejlepsi-b.nejlepsi;
 
-        radek.innerHTML=`
+});
 
-<td>${zavodnik.poradi}</td>
+soutezici.forEach(function(zavodnik,index){
+
+const radek=document.createElement("tr");
+
+radek.innerHTML=`
+
+<td>${index+1}</td>
 
 <td>${zavodnik.prijmeni}</td>
 
 <td>${zavodnik.jmeno}</td>
 
-<td>${zavodnik.pokusy.join("<br>")}</td>
+<td>${zavodnik.pokusy.join(" | ")}</td>
 
-<td><b>${zavodnik.nejlepsi}</b></td>
+<td class="nejlepsi">
+
+${zavodnik.nejlepsi.toFixed(2)}
+
+</td>
 
 <td>
-<button onclick="smazatSouteziciho(${index})">
-🗑️
+
+<button
+onclick="smazatSouteziciho(${zavodnik.id})">
+
+🗑️ Smazat
+
 </button>
+
 </td>
 
 `;
 
-        tbody.appendChild(radek);
+tbody.appendChild(radek);
 
-    });
-
-}
-function smazatSouteziciho(index){
-
-    if(!confirm("Opravdu smazat soutěžícího?")){
-        return;
-    }
-
-    soutezici.splice(index,1);
-
-    soutezici.forEach(function(zavodnik,i){
-        zavodnik.poradi = i + 1;
-    });
-
-    poradi = soutezici.length + 1;
-
-    vykresliTabulku();
+});
 
 }
+
+
+/**************************************************
+SMAZÁNÍ SOUTĚŽÍCÍHO
+**************************************************/
+
+function smazatSouteziciho(id){
+
+if(!confirm("Opravdu smazat soutěžícího?")){
+
+return;
+
+}
+
+soutezici=soutezici.filter(function(z){
+
+return z.id!=id;
+
+});
+
+vykresliTabulku();
+
+obnovStatistiky();
+
+ulozitData();
+
+}
+
+
+/**************************************************
+VYČIŠTĚNÍ FORMULÁŘE
+**************************************************/
+
+function vycistitFormular(){
+
+document.getElementById("prijmeni").value="";
+
+document.getElementById("jmeno").value="";
+
+document.getElementById("pokusy").innerHTML=`
+
+<div class="form-group">
+
+<label>Čas 1. pokusu</label>
+
+<input
+class="cas"
+type="number"
+step="0.01"
+min="0"
+placeholder="15.23">
+
+</div>
+
+`;
+
+pocetPokusu=1;
+
+document.getElementById("prijmeni").focus();
+
+}
+    /**************************************************
+STATISTIKY
+**************************************************/
+
+function obnovStatistiky(){
+
+document.getElementById("statSoutezicich").textContent=soutezici.length;
+
+let pocet=0;
+
+let nej="-";
+
+if(soutezici.length>0){
+
+nej=soutezici[0].nejlepsi;
+
+}
+
+soutezici.forEach(function(z){
+
+pocet+=z.pokusy.length;
+
+if(z.nejlepsi<nej){
+
+nej=z.nejlepsi;
+
+}
+
+});
+
+document.getElementById("statPokusu").textContent=pocet;
+
+document.getElementById("statNejlepsi").textContent=nej;
+
+}
+
+
+/**************************************************
+ULOŽENÍ DAT
+**************************************************/
+
+function ulozitData(){
+
+localStorage.setItem(
+
+"motaniHadic",
+
+JSON.stringify(soutezici)
+
+);
+
+}
+
+
+/**************************************************
+NAČTENÍ DAT
+**************************************************/
+
+function nacistData(){
+
+const data=
+
+localStorage.getItem("motaniHadic");
+
+if(!data){
+
+return;
+
+}
+
+soutezici=JSON.parse(data);
+
+if(soutezici.length>0){
+
+dalsiId=
+
+Math.max(...soutezici.map(z=>z.id))+1;
+
+}
+
+vykresliTabulku();
+
+obnovStatistiky();
+
+}
+
+nacistData();
+
+
+/**************************************************
+VYHLEDÁVÁNÍ
+**************************************************/
+
+document
+.getElementById("vyhledavani")
+.addEventListener("input",function(){
+
+const text=
+
+this.value.toLowerCase();
+
+document
+.querySelectorAll("#vysledky tr")
+.forEach(function(radek){
+
+if(
+
+radek.innerText
+.toLowerCase()
+.includes(text)
+
+){
+
+radek.style.display="";
+
+}else{
+
+radek.style.display="none";
+
+}
+
+});
+
+});
 
 </script>
 
