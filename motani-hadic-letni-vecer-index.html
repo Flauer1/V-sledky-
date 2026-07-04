@@ -1,36 +1,7 @@
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Motání hadic</title>
-<title>SDH Motání hadic</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
-body{
-font-family:Arial;
-background:#ececec;
-padding:20px;
-}
-
-.container{
-max-width:1800px;
-max-width:1200px;
-margin:auto;
-background:#fff;
-padding:25px;
 border-radius:12px;
-background:white;
-padding:20px;
-border-radius:10px;
 }
 
+h1{
 header{
 text-align:center;
 margin-bottom:20px;
@@ -40,27 +11,7 @@ h1{
 color:#c62828;
 }
 
-.karta{
-background:#fafafa;
-padding:20px;
-margin-top:20px;
-border-radius:10px;
-}
-
-input{
-padding:10px;
-margin:5px;
-@@ -60,8 +42,8 @@
-
-table{
-width:100%;
-margin-top:20px;
-border-collapse:collapse;
-margin-top:20px;
-}
-
-th,td{
-@@ -75,11 +57,6 @@
+@@ -71,6 +75,11 @@
 color:white;
 }
 
@@ -72,231 +23,252 @@ font-weight:bold;
 </style>
 </head>
 
-@@ -88,192 +65,116 @@
+@@ -79,21 +88,16 @@
 <div class="container">
 
 <header>
+
 <h1>🚒 Letní večer SDH Lubina II Větřkovice</h1>
+
 <h2>18. července 2026</h2>
-<h1>🚒 SDH Lubina – Motání hadic</h1>
-<h3>Firestore verze</h3>
+
 </header>
 
 <div class="karta">
+
 <h3>Přidání soutěžícího</h3>
 
-<div>
 <input id="prijmeni" placeholder="Příjmení">
 <input id="jmeno" placeholder="Jméno">
 <button id="btnPridat">Přidat</button>
-<button onclick="pridat()">Přidat</button>
+
 </div>
 
 <div class="karta">
-
-<table>
-<thead>
-<tr id="hlavicka">
-<th>Poř.</th>
-<tr>
-<th>#</th>
-<th>Příjmení</th>
-<th>Jméno</th>
-<th>Akce</th>
-<th>Nejlepší</th>
-<th>Pokus 1</th>
-<th>Akce</th>
-</tr>
+@@ -111,11 +115,12 @@ <h3>Přidání soutěžícího</h3>
 </thead>
 
 <tbody id="vysledky"></tbody>
-<tbody id="tab"></tbody>
+
 </table>
 
 </div>
 
 </div>
-<script type="module">
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-getFirestore,
-collection,
-addDoc,
-onSnapshot,
-deleteDoc,
-doc,
-updateDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-
-// 🔥 SEM DOPLŇ SVŮJ CONFIG
-const firebaseConfig = {
-apiKey: "XXX",
-authDomain: "XXX",
-projectId: "XXX"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 <script>
-const col = collection(db, "soutez");
 
 let soutezici = [];
-let dalsiId = 1;
-let maxPokusu = 1;
-let data = [];
+@@ -124,164 +129,152 @@ <h3>Přidání soutěžícího</h3>
 
 document.getElementById("btnPridat").addEventListener("click", pridejSouteziciho);
-// realtime načítání
-onSnapshot(col, (snap) => {
 
+function pridejSouteziciho() {
 function pridejSouteziciho(){
-data = [];
 
-snap.forEach(d => {
-data.push({ id: d.id, ...d.data() });
-});
-
-render();
-
-});
-
+    const prijmeni = document.getElementById("prijmeni").value.trim();
+    const jmeno = document.getElementById("jmeno").value.trim();
 const p = document.getElementById("prijmeni").value.trim();
 const j = document.getElementById("jmeno").value.trim();
-window.pridat = async function(){
 
-const p = document.getElementById("prijmeni").value;
-const j = document.getElementById("jmeno").value;
-
+    if (!prijmeni || !jmeno) {
+        alert("Vyplň příjmení i jméno.");
+        return;
+    }
 if(!p || !j) return;
 
+    soutezici.push({
+        id: dalsiId++,
+        prijmeni,
+        jmeno,
+        pokusy: [],
+        nejlepsi: ""
+    });
 soutezici.push({
 id: dalsiId++,
 prijmeni: p,
 jmeno: j,
 pokusy: [],
 nejlepsi: ""
-await addDoc(col,{
-prijmeni:p,
-jmeno:j,
-nejlepsi:"-"
 });
 
+    document.getElementById("prijmeni").value = "";
+    document.getElementById("jmeno").value = "";
 document.getElementById("prijmeni").value="";
 document.getElementById("jmeno").value="";
 
+    vykresliTabulku();
 vykresli();
 }
 
+function vykresliTabulku() {
 function vykresli(){
-window.smaz = async function(id){
-await deleteDoc(doc(db,"soutez",id));
-}
 
+    const tbody = document.getElementById("vysledky");
+    tbody.innerHTML = "";
 const tbody = document.getElementById("vysledky");
 tbody.innerHTML="";
-window.render = function(){
 
+    soutezici.forEach((z, index) => {
 soutezici.forEach((z,i)=>{
-const t = document.getElementById("tab");
-t.innerHTML="";
 
+        const tr = document.createElement("tr");
 const tr = document.createElement("tr");
-data.forEach((z,i)=>{
 
+        tr.insertCell().textContent = index + 1;
+        tr.insertCell().textContent = z.prijmeni;
+        tr.insertCell().textContent = z.jmeno;
 tr.innerHTML = `
-t.innerHTML += `
-<tr>
 <td>${i+1}</td>
 <td>${z.prijmeni}</td>
 <td>${z.jmeno}</td>
-<td>${z.nejlepsi || "-"}</td>
 <td>
 <button onclick="pridatPokus(${z.id})">➕</button>
 <button onclick="edit(${z.id})">✏️</button>
 <button onclick="smaz(${z.id})">🗑️</button>
-<button onclick="smaz('${z.id}')">🗑️</button>
 </td>
 <td class="${z.nejlepsi ? 'nejlepsi' : ''}">${z.nejlepsi || '-'}</td>
-</tr>
 `;
 
+        // AKCE
+        const akce = tr.insertCell();
 for(let i=0;i<maxPokusu;i++){
 tr.innerHTML += `<td>${z.pokusy[i] || ''}</td>`;
 }
 
+        const btnPlus = document.createElement("button");
+        btnPlus.textContent = "➕";
+        btnPlus.onclick = () => pridatPokus(z.id);
 tbody.appendChild(tr);
 
+        const btnEdit = document.createElement("button");
+        btnEdit.textContent = "✏️";
+        btnEdit.onclick = () => {
+            const p = prompt("Příjmení:", z.prijmeni);
+            if (p === null) return;
 });
 
+            const j = prompt("Jméno:", z.jmeno);
+            if (j === null) return;
 }
 
+            z.prijmeni = p.trim();
+            z.jmeno = j.trim();
 function pridatPokus(id){
 
+            vykresliTabulku();
+        };
 const cas = prompt("Zadej čas (15:23)");
 if(!cas) return;
 
+        const btnDel = document.createElement("button");
+        btnDel.textContent = "🗑️";
+        btnDel.onclick = () => {
 const z = soutezici.find(s=>s.id===id);
 
+            if (confirm("Smazat soutěžícího?")) {
+                soutezici = soutezici.filter(s => s.id !== z.id);
+                vykresliTabulku();
+            }
 z.pokusy.push(cas);
 
+        };
 // nové sloupce
 if(z.pokusy.length > maxPokusu){
 
+        akce.appendChild(btnPlus);
+        akce.appendChild(btnEdit);
+        akce.appendChild(btnDel);
 maxPokusu = z.pokusy.length;
 
+        // nejlepší
+        tr.insertCell().textContent = z.nejlepsi || "-";
 const th = document.createElement("th");
 th.textContent = "Pokus " + maxPokusu;
 
+        // pokusy
+        for (let i = 0; i < maxPokusu; i++) {
 document.getElementById("hlavicka").appendChild(th);
 }
 
+            const td = tr.insertCell();
 // výpočet nejlepšího času (SAFE)
 if(z.pokusy.length === 0) return;
 
+            if (z.pokusy[i]) {
+                td.textContent = z.pokusy[i];
+                td.style.cursor = "pointer";
 let nej = z.pokusy[0];
 
+                td.onclick = () => upravitPokus(z.id, i);
+            }
+        }
 for(let i=1;i<z.pokusy.length;i++){
 
+        tbody.appendChild(tr);
+    });
+}
 const [m1,s1] = nej.split(":").map(Number);
 const [m2,s2] = z.pokusy[i].split(":").map(Number);
 
+function pridatPokus(id) {
 if((m2*60+s2) < (m1*60+s1)){
 nej = z.pokusy[i];
 }
 
+    const cas = prompt("Zadej čas (např. 15:23)");
+    if (!cas) return;
 }
 
+    const z = soutezici.find(s => s.id === id);
 z.nejlepsi = nej;
 
+    z.pokusy.push(cas);
 vykresli();
 }
 
+    // sloupce
+    if (z.pokusy.length > maxPokusu) {
+        maxPokusu = z.pokusy.length;
 function edit(id){
 
+        const th = document.createElement("th");
+        th.textContent = "Pokus " + maxPokusu;
 const z = soutezici.find(s=>s.id===id);
 
+        document.getElementById("hlavicka").appendChild(th);
+    }
 const p = prompt("Příjmení:", z.prijmeni);
 if(p===null || p.trim()==="") return;
 
+    // nejlepší čas
+    let nej = z.pokusy[0];
 const j = prompt("Jméno:", z.jmeno);
 if(j===null || j.trim()==="") return;
 
+    for (let i = 1; i < z.pokusy.length; i++) {
 z.prijmeni = p.trim();
 z.jmeno = j.trim();
 
+        const [m1, s1] = nej.split(":").map(Number);
+        const [m2, s2] = z.pokusy[i].split(":").map(Number);
 vykresli();
 }
 
+        if ((m2 * 60 + s2) < (m1 * 60 + s1)) {
+            nej = z.pokusy[i];
+        }
+    }
 function smaz(id){
 
+    z.nejlepsi = nej;
 soutezici = soutezici.filter(s=>s.id!==id);
 vykresli();
 
+    vykresliTabulku();
 }
 
+function upravitPokus(id, index) {
 function upravitPokus(id,index){
 
 const z = soutezici.find(s=>s.id===id);
@@ -304,28 +276,45 @@ const z = soutezici.find(s=>s.id===id);
 const novy = prompt("Upravit čas:", z.pokusy[index]);
 if(!novy) return;
 
+    const z = soutezici.find(s => s.id === id);
 z.pokusy[index]=novy;
 
+    const novy = prompt("Upravit čas:", z.pokusy[index]);
+    if (!novy) return;
 // přepočet
 let nej = z.pokusy[0];
 
+    z.pokusy[index] = novy;
 for(let i=1;i<z.pokusy.length;i++){
 
+    // přepočet
+    let nej = z.pokusy[0];
 const [m1,s1] = nej.split(":").map(Number);
 const [m2,s2] = z.pokusy[i].split(":").map(Number);
 
+    for (let i = 1; i < z.pokusy.length; i++) {
 if((m2*60+s2) < (m1*60+s1)){
 nej = z.pokusy[i];
 }
 
+        const [m1, s1] = nej.split(":").map(Number);
+        const [m2, s2] = z.pokusy[i].split(":").map(Number);
 }
 
+        if ((m2 * 60 + s2) < (m1 * 60 + s1)) {
+            nej = z.pokusy[i];
+        }
+    }
 z.nejlepsi = nej;
 
+    z.nejlepsi = nej;
 vykresli();
 
+    vykresliTabulku();
 }
+ </script>
 
 </script>
 
 </body>
+</html>
