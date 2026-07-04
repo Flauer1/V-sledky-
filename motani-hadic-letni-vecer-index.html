@@ -300,8 +300,12 @@ akce.appendChild(btnDelete);
         // Nejlepší
 tr.insertCell().textContent = z.nejlepsi || "-";
 
-// Pokus 1
-tr.insertCell().textContent = z.pokusy[0] || "";
+// Pokusy
+for(let i=0;i<maxPokusu;i++){
+
+    tr.insertCell().textContent = z.pokusy[i] || "";
+
+}
 
  tbody.appendChild(tr);
 
@@ -320,8 +324,28 @@ function pridatPokus(id){
     const zavodnik = soutezici.find(z => z.id === id);
 
     zavodnik.pokusy.push(cas);
+ if(zavodnik.pokusy.length > maxPokusu){
 
-    zavodnik.nejlepsi = zavodnik.pokusy[0];
+    maxPokusu = zavodnik.pokusy.length;
+
+    const hlavicka = document.getElementById("hlavicka");
+
+    const th = document.createElement("th");
+
+    th.textContent = "Pokus " + maxPokusu;
+
+    hlavicka.appendChild(th);
+
+}
+
+    zavodnik.nejlepsi = zavodnik.pokusy.reduce(function(nej,cas){
+
+    const a = parseFloat(nej.replace(":","."));
+    const b = parseFloat(cas.replace(":","."));
+
+    return b < a ? cas : nej;
+
+});
 
     vykresliTabulku();
 
