@@ -1,1 +1,162 @@
+<!DOCTYPE html>
+<html lang="cs">
 
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Výsledky - Motání hadic</title>
+
+<style>
+body{
+font-family: Arial;
+background:#ececec;
+padding:20px;
+}
+
+.container{
+max-width:900px;
+margin:auto;
+background:#fff;
+padding:20px;
+border-radius:10px;
+}
+
+h1{
+text-align:center;
+color:#c62828;
+margin-bottom:20px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #ccc;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#c62828;
+color:white;
+}
+
+tr.first{
+background:#fff3cd;
+font-weight:bold;
+}
+
+tr.second{
+background:#e0e0e0;
+font-weight:bold;
+}
+
+tr.third{
+background:#f3e5ab;
+font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏆 Výsledky soutěže</h1>
+
+<table>
+<thead>
+<tr>
+<th>Pořadí</th>
+<th>Příjmení</th>
+<th>Jméno</th>
+<th>Nejlepší čas</th>
+</tr>
+</thead>
+
+<tbody id="tab"></tbody>
+
+</table>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+getFirestore,
+collection,
+onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBnHKiL6ANjvRbUpd3sv4TwGuq7-4_c6J8",
+  authDomain: "zkouska-2.firebaseapp.com",
+  projectId: "zkouska-2",
+  storageBucket: "zkouska-2.firebasestorage.app",
+  messagingSenderId: "51239007198",
+  appId: "1:51239007198:web:4e98cdfd91279a337da34f"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const col = collection(db, "motani_hadic");
+
+let data = [];
+
+/* ================= REALTIME ================= */
+onSnapshot(col, (snap)=>{
+
+data = [];
+
+snap.forEach(d=>{
+data.push({id:d.id, ...d.data()});
+});
+
+render();
+
+});
+
+/* ================= RENDER ================= */
+function render(){
+
+const t = document.getElementById("tab");
+t.innerHTML = "";
+
+// seřazení podle času
+const sorted = [...data].sort((a,b)=>{
+
+const ta = a.nejlepsi ? a.nejlepsi.split(":").map(Number) : [99,99];
+const tb = b.nejlepsi ? b.nejlepsi.split(":").map(Number) : [99,99];
+
+return (ta[0]*60+ta[1]) - (tb[0]*60+tb[1]);
+});
+
+sorted.forEach((z,i)=>{
+
+let cls = "";
+
+if(i===0) cls="first";
+else if(i===1) cls="second";
+else if(i===2) cls="third";
+
+t.innerHTML += `
+<tr class="${cls}">
+<td>${i+1}</td>
+<td>${z.prijmeni}</td>
+<td>${z.jmeno}</td>
+<td><b>${z.nejlepsi || "-"}</b></td>
+</tr>
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
