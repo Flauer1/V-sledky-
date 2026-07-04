@@ -203,13 +203,16 @@ const cas = prompt("Zadej čas (15:23)");
 if(!cas) return;
 
 const z = data.find(s=>s.id===id);
+if(!z) return;
 
 const pokusy = z.pokusy || [];
 pokusy.push(cas);
 
+// výpočet nejlepšího času
 let nej = pokusy[0];
 
 for(let i=1;i<pokusy.length;i++){
+
 const [m1,s1] = nej.split(":").map(Number);
 const [m2,s2] = pokusy[i].split(":").map(Number);
 
@@ -227,19 +230,22 @@ nejlepsi:nej
   window.editPokus = async function(id,index){
 
 const z = data.find(s=>s.id===id);
+if(!z || !z.pokusy) return;
 
-if(!z.pokusy || !z.pokusy[index]) return;
+if(!z.pokusy[index]) return;
 
 const novy = prompt("Upravit čas:", z.pokusy[index]);
 if(!novy) return;
 
 z.pokusy[index] = novy;
 
+// výpočet nejlepšího času
 let nej = z.pokusy[0];
 
 for(let i=1;i<z.pokusy.length;i++){
+
 const [m1,s1] = nej.split(":").map(Number);
-const [m2,s2] = z.pokusy[i].split(":").map(Number); // ✔ FIX
+const [m2,s2] = z.pokusy[i].split(":").map(Number);
 
 if((m2*60+s2) < (m1*60+s1)){
 nej = z.pokusy[i];
