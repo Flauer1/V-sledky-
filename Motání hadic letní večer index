@@ -1,208 +1,183 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motání hadic na čas</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motání hadic na čas</title>
 
-<div class="container">
-
-    <h1>🧯 Motání hadic na čas</h1>
-
-    <div id="cas">00:00.00</div>
-
-    <div class="buttons">
-        <button id="start">START</button>
-        <button id="stop">STOP</button>
-        <button id="reset">RESET</button>
-        <button id="save">ULOŽIT ČAS</button>
-        <button id="clear">SMAZAT VŠE</button>
-    </div>
-
-    <div class="info">
-
-        <div class="box">
-            <h3>Nejlepší čas</h3>
-            <div id="bestTime">--:--.--</div>
-        </div>
-
-        <div class="box">
-            <h3>Počet pokusů</h3>
-            <div id="count">0</div>
-        </div>
-
-        <div class="box">
-            <h3>Průměr</h3>
-            <div id="average">--:--.--</div>
-        </div>
-
-    </div>
-
-    <table id="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Čas</th>
-                <th>Datum</th>
-            </tr>
-        </thead>
-
-        <tbody id="results"></tbody>
-
-    </table>
-
-</div>
-
-<script src="script.js"></script>
-
-</body>
-</html>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+<style>
 
 body{
     font-family:Arial,Helvetica,sans-serif;
-    background:#ececec;
+    background:#f2f2f2;
+    margin:0;
     padding:20px;
 }
 
 .container{
-    max-width:900px;
+    max-width:1000px;
     margin:auto;
-    background:#fff;
-    border-radius:12px;
+    background:white;
     padding:20px;
-    box-shadow:0 0 15px rgba(0,0,0,.15);
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.2);
 }
 
 h1{
     text-align:center;
-    margin-bottom:20px;
+    color:#c62828;
 }
 
-#cas{
+h2{
     text-align:center;
-    font-size:64px;
-    font-weight:bold;
-    margin:25px 0;
-    color:#222;
-}
-
-.buttons{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-    margin-bottom:25px;
-}
-
-button{
-    padding:12px 20px;
-    font-size:17px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
-    transition:.2s;
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-#start{background:#28a745;color:#fff;}
-#stop{background:#dc3545;color:#fff;}
-#reset{background:#007bff;color:#fff;}
-#save{background:#ff9800;color:#fff;}
-#clear{background:#555;color:#fff;}
-
-.info{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
-    margin-bottom:25px;
-}
-
-.box{
-    background:#f7f7f7;
-    border-radius:10px;
-    padding:15px;
-    text-align:center;
-    border:1px solid #ddd;
-}
-
-.box h3{
-    margin-bottom:10px;
-    font-size:18px;
-}
-
-.box div{
-    font-size:28px;
-    font-weight:bold;
-    color:#0b7a0b;
+    color:#666;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    margin-top:20px;
 }
 
 th,td{
     border:1px solid #ccc;
     padding:10px;
-    text-align:center;
 }
 
 th{
-    background:#efefef;
+    background:#c62828;
+    color:white;
 }
 
-tr:nth-child(even){
-    background:#fafafa;
+input{
+    width:100%;
+    padding:8px;
+    box-sizing:border-box;
 }
 
-.best{
-    background:#d4edda !important;
-    font-weight:bold;
+button{
+    padding:10px 20px;
+    background:#2e7d32;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:5px;
 }
 
-@media(max-width:700px){
+button:hover{
+    background:#1b5e20;
+}
 
-    #cas{
-        font-size:46px;
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🚒 Letní večer SDH Lubina II Větřkovice</h1>
+<h2>18. 7. 2026</h2>
+
+<h3>Přidání soutěžícího</h3>
+
+<table>
+
+<tr>
+<td width="180">Příjmení</td>
+<td><input id="prijmeni"></td>
+</tr>
+
+<tr>
+<td>Jméno</td>
+<td><input id="jmeno"></td>
+</tr>
+
+<tr>
+<td>Čas 1. pokusu</td>
+<td><input id="cas"></td>
+</tr>
+
+<tr>
+<td></td>
+<td>
+<button type="button" id="pridatPokus">
+➕ Přidat další pokus
+</button>
+</td>
+</tr>
+
+<tbody id="dalsiPokusy"></tbody>
+
+<tr>
+<td colspan="2" style="text-align:center;">
+<button id="pridat">
+➕ Přidat soutěžícího
+</button>
+</td>
+</tr>
+
+</table>
+
+<h3>Seznam soutěžících</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>#</th>
+<th>Příjmení</th>
+<th>Jméno</th>
+<th>Pokusy</th>
+<th>Nejlepší čas</th>
+</tr>
+
+</thead>
+
+<tbody id="vysledky">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+let poradi = 1;
+
+document.getElementById("pridat").addEventListener("click", function () {
+
+    const prijmeni = document.getElementById("prijmeni").value.trim();
+    const jmeno = document.getElementById("jmeno").value.trim();
+    const cas = document.getElementById("cas").value.trim();
+
+    if (prijmeni === "" || jmeno === "" || cas === "") {
+        alert("Vyplň příjmení, jméno i čas.");
+        return;
     }
 
-    button{
-        width:100%;
-    }
+    const radek = document.createElement("tr");
 
-}
-const cas = document.getElementById("cas");
+    radek.innerHTML = `
+    <td>${poradi}</td>
+    <td>${prijmeni}</td>
+    <td>${jmeno}</td>
+    <td>${cas}</td>
+    <td>${cas}</td>
+`;
 
-const start = document.getElementById("start");
-const stop = document.getElementById("stop");
-const reset = document.getElementById("reset");
-const save = document.getElementById("save");
-const clear = document.getElementById("clear");
+    document.getElementById("vysledky").appendChild(radek);
 
-const bestTime = document.getElementById("bestTime");
-const count = document.getElementById("count");
-const average = document.getElementById("average");
-const results = document.getElementById("results");
+    poradi++;
 
-let startTime = 0;
-let elapsedTime = 0;
-let timer = null;
-let running = false;
+    document.getElementById("prijmeni").value = "";
+    document.getElementById("jmeno").value = "";
+    document.getElementById("cas").value = "";
 
-let records = [];
+    document.getElementById("prijmeni").focus();
 
-cas.textContent = "00:00.00";
-bestTime.textContent = "--:--.--";
-count.textContent = "0";
-average.textContent = "--:--.--";
+});
+</script>
+
+</body>
+</html>
