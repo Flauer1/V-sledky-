@@ -223,11 +223,11 @@ window.render = function(){
 };
 window.pridatPokus = async function(id){
 
-const cas = prompt("Zadej čas (HH:MM)");
+const cas = prompt("Zadej čas (15:23)");
 if(!cas) return;
 
 if(!validTime(cas)){
-alert("Špatný formát! Použij HH:MM (např. 15:30)");
+alert("Špatný čas! Použij HH:MM (např. 15:30)");
 return;
 }
 if(!cas) return;
@@ -259,7 +259,6 @@ nejlepsi:nej
 };
 window.editPokus = async function(id,index){
 
-// vezmeme aktuální data z Firebase snapshotu
 const z = data.find(s => s.id === id);
 
 if(!z || !Array.isArray(z.pokusy)) return;
@@ -267,21 +266,21 @@ if(!z || !Array.isArray(z.pokusy)) return;
 const stare = z.pokusy[index];
 if(!stare) return;
 
-if(!validTime(novy)){
-alert("Špatný formát! Použij HH:MM");
-return;
-}
+const novy = prompt("Upravit čas (15:23):", stare);
 if(!novy) return;
 
-// kontrola formátu
-if(!novy.includes(":")) {
-alert("Špatný formát času!");
+// validace (pokud ji chceš používat)
+if(typeof validTime === "function"){
+if(!validTime(novy)){
+alert("Špatný čas! Použij HH:MM");
 return;
 }
+}
 
+// uložíme změnu
 z.pokusy[index] = novy;
 
-// přepočet nejlepšího času
+// výpočet nejlepšího času
 let nej = z.pokusy[0];
 
 for(let i=1;i<z.pokusy.length;i++){
