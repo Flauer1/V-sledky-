@@ -92,23 +92,28 @@ color:white;
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
-getFirestore,
-collection,
-addDoc,
-onSnapshot,
-deleteDoc,
-doc,
-updateDoc
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  deleteDoc,
+  doc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-apiKey: "XXX",
-authDomain: "XXX",
-projectId: "XXX"
+  apiKey: "AIzaSyBnHKiL6ANjvRbUpd3sv4TwGuq7-4_c6J8",
+  authDomain: "zkouska-2.firebaseapp.com",
+  projectId: "zkouska-2",
+  storageBucket: "zkouska-2.firebasestorage.app",
+  messagingSenderId: "51239007198",
+  appId: "1:51239007198:web:4e98cdfd91279a337da34f"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// 👉 TADY JE TVÁ KOLEKCE
 const col = collection(db, "motani_hadic");
 
 let data = [];
