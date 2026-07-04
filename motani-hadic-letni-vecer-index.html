@@ -612,7 +612,7 @@ document.getElementById("statSoutezicich").textContent=soutezici.length;
 
 let pocet=0;
 
-let nej="-";
+let nej=Infinity;
 
 if(soutezici.length>0){
 
@@ -634,7 +634,8 @@ nej=z.nejlepsi;
 
 document.getElementById("statPokusu").textContent=pocet;
 
-document.getElementById("statNejlepsi").textContent=nej;
+document.getElementById("statNejlepsi").textContent =
+    nej === Infinity ? "-" : nej.toFixed(2);
 
 }
 
