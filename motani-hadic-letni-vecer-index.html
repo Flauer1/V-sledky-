@@ -191,7 +191,14 @@ window.render = function(){
           <button onclick="pridatPokus('${z.id}')">➕</button>
         </td>
         <td>${z.nejlepsi || "-"}</td>
-        <td>${(z.pokusy||[]).join("<br>")}</td>
+        <td>
+  ${(z.pokusy || []).map((c, i) => `
+    <div onclick="editPokus('${z.id}', ${i})"
+         style="cursor:pointer; padding:2px;">
+      ⏱ ${c}
+    </div>
+  `).join("")}
+</td>
       </tr>
     `;
   });
