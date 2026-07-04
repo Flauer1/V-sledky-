@@ -175,28 +175,67 @@ jmeno:j
 
 /* ================= RENDER ================= */
 window.render = function(){
+/* ================= POKUSY ================= */
+window.pridatPokus = async function(id){
 
-const t = document.getElementById("tab");
-t.innerHTML = "";
+const cas = prompt("Zadej čas (15:23)");
+if(!cas) return;
 
-data.forEach((z,i)=>{
+const z = data.find(s=>s.id===id);
 
-t.innerHTML += `
-<tr>
-<td>${i+1}</td>
-<td>${z.prijmeni}</td>
-<td>${z.jmeno}</td>
-<td>
-<button onclick="edit('${z.id}')">✏️</button>
-<button onclick="smaz('${z.id}')">🗑️</button>
-</td>
-</tr>
-`;
+const pokusy = z.pokusy || [];
+pokusy.push(cas);
 
+// nejlepší čas
+let nej = pokusy[0];
+
+for(let i=1;i<pokusy.length;i++){
+
+const [m1,s1] = nej.split(":").map(Number);
+const [m2,s2] = pokusy[i].split(":").map(Number);
+
+if((m2*60+s2) < (m1*60+s1)){
+nej = pokusy[i];
+}
+}
+
+await updateDoc(doc(db,"motani_hadic",id),{
+pokusy:pokusy,
+nejlepsi:nej
 });
 
 };
+  window.editPokus = async function(id,index){
 
+const z = data.find(s=>s.id===id);
+
+if(!z.pokusy || !z.pokusy[index]) return;
+
+const novy = prompt("Upravit čas:", z.pokusy[index]);
+if(!novy) return;
+
+z.pokusy[index] = novy;
+
+// nejlepší čas
+let nej = z.pokusy[0];
+
+for(let i=1;i<z.pokusy.length;i++){
+
+const [m1,s1] = nej.split(":").map(Number);
+const [m2,s2] = z.pokusy[i].split(":").map(Number);
+
+if((m2*60+s2) < (m1*60+s1)){
+nej = z.pokusy[i];
+}
+}
+
+await updateDoc(doc(db,"motani_hadic",id),{
+pokusy:z.pokusy,
+nejlepsi:nej
+});
+
+};
+};
 </script>
 
 </body>
