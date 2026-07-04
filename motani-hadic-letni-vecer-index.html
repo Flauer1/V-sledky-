@@ -197,7 +197,7 @@ window.render = function(){
   });
 
 };
-  window.pridatPokus = async function(id){
+window.pridatPokus = async function(id){
 
 const cas = prompt("Zadej čas (15:23)");
 if(!cas) return;
@@ -239,7 +239,7 @@ let nej = z.pokusy[0];
 
 for(let i=1;i<z.pokusy.length;i++){
 const [m1,s1] = nej.split(":").map(Number);
-const [m2,s2] = z.pokusy[i].map(Number);
+const [m2,s2] = z.pokusy[i].split(":").map(Number); // ✔ FIX
 
 if((m2*60+s2) < (m1*60+s1)){
 nej = z.pokusy[i];
