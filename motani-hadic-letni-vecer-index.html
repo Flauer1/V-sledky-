@@ -228,4 +228,75 @@ let dalsiId=1;
 
 let maxPokusu=1;
 
-    
+ const btnPridat = document.getElementById("btnPridat");
+
+btnPridat.addEventListener("click", pridejSouteziciho);
+
+function pridejSouteziciho() {
+
+    const prijmeni = document.getElementById("prijmeni").value.trim();
+    const jmeno = document.getElementById("jmeno").value.trim();
+
+    if (prijmeni === "" || jmeno === "") {
+        alert("Vyplň příjmení i jméno.");
+        return;
+    }
+
+    soutezici.push({
+        id: dalsiId++,
+        prijmeni: prijmeni,
+        jmeno: jmeno,
+        nejlepsi: "",
+        pokusy: []
+    });
+
+    document.getElementById("prijmeni").value = "";
+    document.getElementById("jmeno").value = "";
+
+    vykresliTabulku();
+}
+
+function vykresliTabulku() {
+
+    const tbody = document.getElementById("vysledky");
+
+    tbody.innerHTML = "";
+
+    soutezici.forEach(function(z, index) {
+
+        const tr = document.createElement("tr");
+
+        // Pořadí
+        tr.insertCell().textContent = index + 1;
+
+        // Příjmení
+        tr.insertCell().textContent = z.prijmeni;
+
+        // Jméno
+        tr.insertCell().textContent = z.jmeno;
+
+        // Akce
+        const akce = tr.insertCell();
+
+        akce.innerHTML = `
+            <button type="button">➕</button>
+            <button type="button">✏️</button>
+            <button type="button">🗑️</button>
+        `;
+
+        // Nejlepší
+        tr.insertCell().textContent = z.nejlepsi || "-";
+
+        // Pokus 1
+        tr.insertCell().textContent = "";
+
+        tbody.appendChild(tr);
+
+    });
+
+}
+</script>
+
+</body>
+
+</html>
