@@ -335,7 +335,25 @@ tr.insertCell().textContent = z.nejlepsi || "-";
 // Pokusy
 for(let i=0;i<maxPokusu;i++){
 
-    tr.insertCell().textContent = z.pokusy[i] || "";
+    const bunka = tr.insertCell();
+
+    if(z.pokusy[i]){
+
+        bunka.textContent = z.pokusy[i];
+
+        bunka.style.cursor = "pointer";
+
+        bunka.title = "Klikni pro úpravu času";
+
+        bunka.onclick = function(){
+
+            upravitPokus(z.id,i);
+
+        };
+
+    }
+
+}
 
 }
 
@@ -382,7 +400,37 @@ function pridatPokus(id){
     vykresliTabulku();
 
 }
+function upravitPokus(id,index){
 
+    const zavodnik = soutezici.find(z=>z.id===id);
+
+    const novyCas = prompt(
+
+        "Uprav čas",
+
+        zavodnik.pokusy[index]
+
+    );
+
+    if(novyCas===null) return;
+
+    if(novyCas.trim()==="") return;
+
+    zavodnik.pokusy[index]=novyCas;
+
+    zavodnik.nejlepsi=zavodnik.pokusy.reduce(function(nej,cas){
+
+        const a=parseFloat(nej.replace(":","."));
+
+        const b=parseFloat(cas.replace(":","."));
+
+        return b<a ? cas : nej;
+
+    });
+
+    vykresliTabulku();
+
+}
 </script>
 
 </body>
