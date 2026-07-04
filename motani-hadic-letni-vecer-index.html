@@ -117,7 +117,24 @@ const db = getFirestore(app);
 const col = collection(db, "motani_hadic");
 
 let data = [];
+function validTime(t){
 
+// musí mít :
+if(!t.includes(":")) return false;
+
+const [m,s] = t.split(":");
+
+if(!m || !s) return false;
+
+// musí být čísla
+if(isNaN(m) || isNaN(s)) return false;
+
+// rozsah
+if(m < 0 || m > 59) return false;
+if(s < 0 || s > 59) return false;
+
+return true;
+}
 /* ================= REALTIME ================= */
 onSnapshot(col, (snap) => {
 
@@ -206,7 +223,13 @@ window.render = function(){
 };
 window.pridatPokus = async function(id){
 
-const cas = prompt("Zadej čas (15:23)");
+const cas = prompt("Zadej čas (HH:MM)");
+if(!cas) return;
+
+if(!validTime(cas)){
+alert("Špatný formát! Použij HH:MM (např. 15:30)");
+return;
+}
 if(!cas) return;
 
 const z = data.find(s=>s.id===id);
@@ -244,7 +267,10 @@ if(!z || !Array.isArray(z.pokusy)) return;
 const stare = z.pokusy[index];
 if(!stare) return;
 
-const novy = prompt("Upravit čas (HH:MM):", stare);
+if(!validTime(novy)){
+alert("Špatný formát! Použij HH:MM");
+return;
+}
 if(!novy) return;
 
 // kontrola formátu
