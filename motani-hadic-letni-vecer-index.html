@@ -10,179 +10,121 @@
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,Helvetica,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#ececec;
-    padding:20px;
+background:#ececec;
+padding:20px;
 }
 
 .container{
-    max-width:1400px;
-    margin:auto;
-    background:#ffffff;
-    border-radius:12px;
-    padding:25px;
-    box-shadow:0 0 20px rgba(0,0,0,.15);
+max-width:1500px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:12px;
+box-shadow:0 0 20px rgba(0,0,0,.15);
 }
 
-header{
-    text-align:center;
-    margin-bottom:30px;
+h1{
+text-align:center;
+color:#c62828;
+margin-bottom:5px;
 }
 
-header h1{
-    color:#c62828;
-    font-size:34px;
-    margin-bottom:8px;
-}
-
-header h2{
-    color:#666;
-    font-size:20px;
-    font-weight:normal;
+h2{
+text-align:center;
+color:#666;
+margin-bottom:30px;
+font-weight:normal;
 }
 
 .card{
-
-    background:#fafafa;
-    border:1px solid #ddd;
-    border-radius:10px;
-    padding:20px;
-    margin-bottom:25px;
-
+background:#fafafa;
+border:1px solid #ddd;
+border-radius:10px;
+padding:20px;
+margin-bottom:25px;
 }
 
 .card h3{
-
-    color:#c62828;
-    margin-bottom:20px;
-
+margin-bottom:20px;
+color:#c62828;
 }
 
-.form-group{
+.form{
+display:flex;
+gap:15px;
+align-items:end;
+flex-wrap:wrap;
+}
 
-    margin-bottom:15px;
-
+.form div{
+flex:1;
+min-width:220px;
 }
 
 label{
-
-    display:block;
-    font-weight:bold;
-    margin-bottom:6px;
-
+display:block;
+margin-bottom:5px;
+font-weight:bold;
 }
 
 input{
-
-    width:100%;
-    padding:10px;
-    border:1px solid #bbb;
-    border-radius:5px;
-    font-size:16px;
-
-}
-
-.buttons{
-
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-top:20px;
-
+width:100%;
+padding:10px;
+font-size:16px;
 }
 
 button{
-
-    border:none;
-    border-radius:5px;
-    padding:10px 18px;
-    cursor:pointer;
-    color:white;
-    font-size:15px;
-
+padding:10px 18px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-size:15px;
+color:white;
+background:#2e7d32;
 }
 
-#pridatPokus{
-
-    background:#1976d2;
-
-}
-
-#ulozit{
-
-    background:#2e7d32;
-
-}
-
-#export{
-
-    background:#ef6c00;
-
-}
-
-#import{
-
-    background:#6a1b9a;
-
-}
-
-#qr{
-
-    background:#455a64;
-
+button:hover{
+opacity:.9;
 }
 
 table{
-
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
 }
 
 th{
-
-    background:#c62828;
-    color:white;
-    padding:10px;
-
+background:#c62828;
+color:white;
+padding:10px;
 }
 
 td{
-
-    border:1px solid #ddd;
-    padding:8px;
-    text-align:center;
-
+border:1px solid #ddd;
+padding:8px;
+text-align:center;
 }
 
 tr:nth-child(even){
-
-    background:#f8f8f8;
-
+background:#f7f7f7;
 }
 
 .nejlepsi{
-
-    background:#c8e6c9;
-    font-weight:bold;
-
+background:#c8e6c9;
+font-weight:bold;
 }
 
-@media(max-width:900px){
-
-    .buttons{
-
-        flex-direction:column;
-
-    }
-
+.ikona{
+cursor:pointer;
+font-size:18px;
+margin:0 3px;
 }
 
 </style>
@@ -193,19 +135,17 @@ tr:nth-child(even){
 
 <div class="container">
 
-<header>
-
 <h1>🚒 Letní večer SDH Lubina II Větřkovice</h1>
 
 <h2>18. července 2026</h2>
-
-</header>
 
 <div class="card">
 
 <h3>Přidání soutěžícího</h3>
 
-<div class="form-group">
+<div class="form">
+
+<div>
 
 <label>Příjmení</label>
 
@@ -213,7 +153,7 @@ tr:nth-child(even){
 
 </div>
 
-<div class="form-group">
+<div>
 
 <label>Jméno</label>
 
@@ -221,69 +161,23 @@ tr:nth-child(even){
 
 </div>
 
-<div id="pokusy">
+<div>
 
-<div class="form-group">
+<button id="pridat">
 
-<label>Čas 1. pokusu</label>
-
-<input
-class="cas"
-type="number"
-step="0.01"
-min="0"
-placeholder="15.23">
-
-</div>
-
-</div>
-
-<div class="buttons">
-
-<button
-id="pridatPokus"
-type="button">
-
-➕ Přidat další pokus
-
-</button>
-
-<button
-id="ulozit"
-type="button">
-
-💾 Přidat soutěžícího
+➕ Přidat soutěžícího
 
 </button>
 
 </div>
 
 </div>
-<div class="card">
-
-<h3>📊 Statistiky</h3>
-
-<p><b>Soutěžících:</b>
-<span id="statSoutezicich">0</span></p>
-
-<p><b>Počet pokusů:</b>
-<span id="statPokusu">0</span></p>
-
-<p><b>Nejlepší čas:</b>
-<span id="statNejlepsi">-</span></p>
-
-<br>
-
-<input
-type="text"
-id="vyhledavani"
-placeholder="🔍 Vyhledat soutěžícího...">
 
 </div>
 
 <div class="card">
 
-<h3>🏆 Výsledky soutěže</h3>
+<h3>Výsledky</h3>
 
 <table id="tabulka">
 
@@ -291,29 +185,17 @@ placeholder="🔍 Vyhledat soutěžícího...">
 
 <tr>
 
-<th width="60">
-Pořadí
-</th>
+<th>Poř.</th>
 
-<th>
-Příjmení
-</th>
+<th>Příjmení</th>
 
-<th>
-Jméno
-</th>
+<th>Jméno</th>
 
-<th width="300">
-Pokusy
-</th>
+<th>Akce</th>
 
-<th width="120">
-Nejlepší čas
-</th>
+<th>Nejlepší</th>
 
-<th width="180">
-Akce
-</th>
+<th>Pokus 1</th>
 
 </tr>
 
@@ -325,108 +207,26 @@ Akce
 
 </table>
 
-<div class="buttons">
-
-<button
-id="export"
-type="button">
-
-📤 Export
-
-</button>
-
-<button
-id="import"
-type="button">
-
-📥 Import
-
-</button>
-
-<button
-id="qr"
-type="button">
-
-📱 QR výsledky
-
-</button>
-
-</div>
-
 </div>
 
 <script>
-
-/**************************************************
-
-MOTÁNÍ HADIC NA ČAS
-Verze 1.0
-
-**************************************************/
 
 let soutezici=[];
 
 let dalsiId=1;
 
-let pocetPokusu=1;
-
-
-/**************************************************
-PŘIDÁNÍ DALŠÍHO POKUSU
-**************************************************/
-
-document
-.getElementById("pridatPokus")
-.addEventListener("click",function(){
-
-    pocetPokusu++;
-
-    const blok=document.createElement("div");
-
-    blok.className="form-group";
-
-    blok.innerHTML=`
-
-<label>Čas ${pocetPokusu}. pokusu</label>
-
-<input
-class="cas"
-type="number"
-step="0.01"
-min="0"
-placeholder="15.23">
-
-`;
-
+let maxPokusu=1;
     document
-    .getElementById("pokusy")
-    .appendChild(blok);
-
-});
-
-
-/**************************************************
-PŘIDÁNÍ SOUTĚŽÍCÍHO
-**************************************************/
-
-document
-.getElementById("ulozit")
+.getElementById("pridat")
 .addEventListener("click",pridatSouteziciho);
-
 
 function pridatSouteziciho(){
 
 const prijmeni=
-document
-.getElementById("prijmeni")
-.value
-.trim();
+document.getElementById("prijmeni").value.trim();
 
 const jmeno=
-document
-.getElementById("jmeno")
-.value
-.trim();
+document.getElementById("jmeno").value.trim();
 
 if(prijmeni=="" || jmeno==""){
 
@@ -436,34 +236,6 @@ return;
 
 }
 
-const pokusy=[];
-
-document
-.querySelectorAll(".cas")
-.forEach(function(pole){
-
-const hodnota=
-pole.value.trim();
-
-if(hodnota!=""){
-
-pokusy.push(parseFloat(hodnota));
-
-}
-
-});
-
-if(pokusy.length==0){
-
-alert("Zadej alespoň jeden čas.");
-
-return;
-
-}
-
-const nejlepsi=
-Math.min(...pokusy);
-
 soutezici.push({
 
 id:dalsiId++,
@@ -472,263 +244,124 @@ prijmeni:prijmeni,
 
 jmeno:jmeno,
 
-pokusy:pokusy,
+nejlepsi:null,
 
-nejlepsi:nejlepsi
+pokusy:[]
 
 });
 
 vykresliTabulku();
 
-obnovStatistiky();
+document.getElementById("prijmeni").value="";
+document.getElementById("jmeno").value="";
 
-vycistitFormular();
-
-ulozitData();
+document.getElementById("prijmeni").focus();
 
 }
-    /**************************************************
-VYKRESLENÍ TABULKY
-**************************************************/
-
-function vykresliTabulku(){
+    function vykresliTabulku(){
 
 const tbody=document.getElementById("vysledky");
 
 tbody.innerHTML="";
 
-soutezici.sort(function(a,b){
-
-return a.nejlepsi-b.nejlepsi;
-
-});
-
-soutezici.forEach(function(zavodnik,index){
+soutezici.forEach(function(z,index){
 
 const radek=document.createElement("tr");
 
-radek.innerHTML=`
+let html=`
 
 <td>${index+1}</td>
 
-<td>${zavodnik.prijmeni}</td>
+<td>${z.prijmeni}</td>
 
-<td>${zavodnik.jmeno}</td>
-
-<td>${zavodnik.pokusy.join(" | ")}</td>
-
-<td class="nejlepsi">
-
-${zavodnik.nejlepsi.toFixed(2)}
-
-</td>
+<td>${z.jmeno}</td>
 
 <td>
 
-<button
-onclick="smazatSouteziciho(${zavodnik.id})">
+<button onclick="pridatPokus(${z.id})">➕</button>
 
-🗑️ Smazat
+<button onclick="upravitSouteziciho(${z.id})">✏️</button>
 
-</button>
+<button onclick="smazatSouteziciho(${z.id})">🗑️</button>
 
 </td>
 
+<td>${z.nejlepsi ?? "-"}</td>
+
 `;
+
+for(let i=0;i<maxPokusu;i++){
+
+html+=`<td>${z.pokusy[i] ?? ""}</td>`;
+
+}
+
+radek.innerHTML=html;
 
 tbody.appendChild(radek);
 
 });
 
 }
+    function pridatPokus(id){
 
+const cas=prompt("Zadej čas (např. 15:23)");
 
-/**************************************************
-SMAZÁNÍ SOUTĚŽÍCÍHO
-**************************************************/
+if(cas===null) return;
 
-function smazatSouteziciho(id){
+const hodnota=cas.trim();
 
-if(!confirm("Opravdu smazat soutěžícího?")){
+if(hodnota==="") return;
 
-return;
+const zavodnik=soutezici.find(z=>z.id===id);
+
+zavodnik.pokusy.push(hodnota);
+
+// přepočet nejlepšího času
+
+zavodnik.nejlepsi=zavodnik.pokusy.reduce(function(a,b){
+
+const aa=parseFloat(a.replace(":","."));
+
+const bb=parseFloat(b.replace(":","."));
+
+return aa<bb ? a : b;
+
+});
+
+// pokud přibyl nový pokus,
+// přidáme nový sloupec
+
+if(zavodnik.pokusy.length>maxPokusu){
+
+maxPokusu=zavodnik.pokusy.length;
+
+// přidání nové hlavičky
+
+const hlavicka=document.querySelector("#tabulka thead tr");
+
+const th=document.createElement("th");
+
+th.textContent="Pokus "+maxPokusu;
+
+hlavicka.appendChild(th);
 
 }
 
-soutezici=soutezici.filter(function(z){
+// seřazení podle nejlepšího času
 
-return z.id!=id;
+soutezici.sort(function(a,b){
+
+if(a.nejlepsi===null) return 1;
+
+if(b.nejlepsi===null) return -1;
+
+return parseFloat(a.nejlepsi.replace(":","."))-
+parseFloat(b.nejlepsi.replace(":","."));
 
 });
 
 vykresliTabulku();
 
-obnovStatistiky();
-
-ulozitData();
-
 }
-
-
-/**************************************************
-VYČIŠTĚNÍ FORMULÁŘE
-**************************************************/
-
-function vycistitFormular(){
-
-document.getElementById("prijmeni").value="";
-
-document.getElementById("jmeno").value="";
-
-document.getElementById("pokusy").innerHTML=`
-
-<div class="form-group">
-
-<label>Čas 1. pokusu</label>
-
-<input
-class="cas"
-type="number"
-step="0.01"
-min="0"
-placeholder="15.23">
-
-</div>
-
-`;
-
-pocetPokusu=1;
-
-document.getElementById("prijmeni").focus();
-
-}
-    /**************************************************
-STATISTIKY
-**************************************************/
-
-function obnovStatistiky(){
-
-document.getElementById("statSoutezicich").textContent=soutezici.length;
-
-let pocet=0;
-
-let nej=Infinity;
-
-if(soutezici.length>0){
-
-nej=soutezici[0].nejlepsi;
-
-}
-
-soutezici.forEach(function(z){
-
-pocet+=z.pokusy.length;
-
-if(z.nejlepsi<nej){
-
-nej=z.nejlepsi;
-
-}
-
-});
-
-document.getElementById("statPokusu").textContent=pocet;
-
-document.getElementById("statNejlepsi").textContent =
-    nej === Infinity ? "-" : nej.toFixed(2);
-
-}
-
-
-/**************************************************
-ULOŽENÍ DAT
-**************************************************/
-
-function ulozitData(){
-
-localStorage.setItem(
-
-"motaniHadic",
-
-JSON.stringify(soutezici)
-
-);
-
-}
-
-
-/**************************************************
-NAČTENÍ DAT
-**************************************************/
-
-function nacistData(){
-
-const data=
-
-localStorage.getItem("motaniHadic");
-
-if(!data){
-
-return;
-
-}
-
-soutezici=JSON.parse(data);
-
-if(soutezici.length>0){
-
-dalsiId=
-
-Math.max(...soutezici.map(z=>z.id))+1;
-
-}
-
-vykresliTabulku();
-
-obnovStatistiky();
-
-}
-
-nacistData();
-
-
-/**************************************************
-VYHLEDÁVÁNÍ
-**************************************************/
-
-document
-.getElementById("vyhledavani")
-.addEventListener("input",function(){
-
-const text=
-
-this.value.toLowerCase();
-
-document
-.querySelectorAll("#vysledky tr")
-.forEach(function(radek){
-
-if(
-
-radek.innerText
-.toLowerCase()
-.includes(text)
-
-){
-
-radek.style.display="";
-
-}else{
-
-radek.style.display="none";
-
-}
-
-});
-
-});
-
-</script>
-
-</body>
-</html>
+    
