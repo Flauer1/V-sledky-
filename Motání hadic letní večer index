@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -24,8 +23,8 @@ padding:20px;
 .container{
 max-width:1200px;
 margin:auto;
-background:white;
-padding:20px;
+background:#fff;
+padding:25px;
 border-radius:10px;
 box-shadow:0 0 15px rgba(0,0,0,.15);
 }
@@ -39,17 +38,55 @@ margin-bottom:5px;
 h2{
 text-align:center;
 color:#666;
-margin-bottom:25px;
+margin-bottom:30px;
 }
 
 h3{
-margin:20px 0 10px;
+margin:25px 0 15px;
+}
+
+.form-group{
+margin-bottom:15px;
+}
+
+label{
+display:block;
+font-weight:bold;
+margin-bottom:5px;
+}
+
+input{
+width:100%;
+padding:10px;
+font-size:16px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.buttons{
+margin-top:20px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+button{
+padding:10px 20px;
+background:#2e7d32;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
-margin-top:15px;
+margin-top:25px;
 }
 
 th{
@@ -59,26 +96,9 @@ padding:10px;
 }
 
 td{
-border:1px solid #ccc;
+border:1px solid #ddd;
 padding:8px;
-}
-
-input{
-width:100%;
-padding:8px;
-}
-
-button{
-padding:10px 18px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-background:#2e7d32;
-color:white;
-}
-
-button:hover{
-opacity:.9;
+text-align:center;
 }
 
 </style>
@@ -94,56 +114,45 @@ opacity:.9;
 
 <h3>Přidání soutěžícího</h3>
 
-<table>
+<div class="form-group">
 
-<tr>
-<td width="180">Příjmení</td>
-<td><input id="prijmeni"></td>
-</tr>
+<label>Příjmení</label>
 
-<tr>
-<td>Jméno</td>
-<td><input id="jmeno"></td>
-</tr>
+<input id="prijmeni">
 
-<tr>
-<td>Čas 1. pokusu</td>
-<td><input id="cas1"></td>
-</tr>
+</div>
 
-<tr>
+<div class="form-group">
 
-<td></td>
+<label>Jméno</label>
 
-<td>
+<input id="jmeno">
+
+</div>
+
+<div id="pokusy">
+
+<div class="form-group">
+
+<label>Čas 1. pokusu</label>
+
+<input class="cas">
+
+</div>
+
+</div>
+
+<div class="buttons">
 
 <button id="pridatPokus" type="button">
 ➕ Přidat další pokus
 </button>
 
-</td>
-
-</tr>
-
-<tbody id="pokusy">
-
-</tbody>
-
-<tr>
-
-<td></td>
-
-<td>
-
-<button id="ulozit">
+<button id="ulozit" type="button">
 💾 Přidat soutěžícího
 </button>
 
-</td>
-
-</tr>
-
-</table>
+</div>
 <h3>Seznam soutěžících</h3>
 
 <table id="tabulka">
@@ -155,8 +164,8 @@ opacity:.9;
 <th width="50">#</th>
 <th>Příjmení</th>
 <th>Jméno</th>
-<th width="280">Pokusy</th>
-<th width="120">Nejlepší čas</th>
+<th width="300">Pokusy</th>
+<th width="130">Nejlepší čas</th>
 <th width="90">Akce</th>
 
 </tr>
@@ -169,6 +178,8 @@ opacity:.9;
 
 </table>
 
+</div>
+
 <script>
 
 let poradi = 1;
@@ -177,30 +188,26 @@ let pocetPokusu = 1;
 
 let soutezici = [];
 
-function vytvorPolePokusu(){
+document
+.getElementById("pridatPokus")
+.addEventListener("click",function(){
 
     pocetPokusu++;
 
-    const radek = document.createElement("tr");
+    const blok = document.createElement("div");
 
-    radek.innerHTML = `
-        <td>Čas ${pocetPokusu}. pokusu</td>
-        <td>
-            <input
-                class="cas"
-                placeholder="Zadej čas">
-        </td>
+    blok.className = "form-group";
+
+    blok.innerHTML = `
+        <label>Čas ${pocetPokusu}. pokusu</label>
+        <input class="cas">
     `;
 
     document
-        .getElementById("pokusy")
-        .appendChild(radek);
+    .getElementById("pokusy")
+    .appendChild(blok);
 
-}
-
-document
-.getElementById("pridatPokus")
-.addEventListener("click",vytvorPolePokusu);
+});
 
 document
 .getElementById("ulozit")
@@ -222,24 +229,17 @@ function ulozitSouteziciho(){
 
     }
 
-    let pokusy=[];
-
-    const prvni =
-    document.getElementById("cas1").value.trim();
-
-    if(prvni!==""){
-
-        pokusy.push(prvni);
-
-    }
+    const pokusy = [];
 
     document
     .querySelectorAll(".cas")
     .forEach(function(pole){
 
-        if(pole.value.trim()!==""){
+        const cas = pole.value.trim();
 
-            pokusy.push(pole.value.trim());
+        if(cas!==""){
+
+            pokusy.push(cas);
 
         }
 
@@ -256,11 +256,11 @@ function ulozitSouteziciho(){
 
     pokusy.forEach(function(cas){
 
-        if(parseFloat(cas.replace(",", ".")) <
-           parseFloat(nejlepsi.replace(",", "."))){
-
+        if(
+            parseFloat(cas.replace(",", ".")) <
+            parseFloat(nejlepsi.replace(",", "."))
+        ){
             nejlepsi = cas;
-
         }
 
     });
@@ -281,17 +281,13 @@ function ulozitSouteziciho(){
 
     document.getElementById("prijmeni").value="";
     document.getElementById("jmeno").value="";
-    document.getElementById("cas1").value="";
 
-    document
-    .querySelectorAll(".cas")
-    .forEach(function(pole){
-
-        pole.parentElement.parentElement.remove();
-
-    });
-
-    document.getElementById("pokusy").innerHTML="";
+    document.getElementById("pokusy").innerHTML=`
+        <div class="form-group">
+            <label>Čas 1. pokusu</label>
+            <input class="cas">
+        </div>
+    `;
 
     pocetPokusu=1;
 
@@ -306,7 +302,7 @@ function vykresliTabulku(){
 
     tbody.innerHTML="";
 
-    soutezici.forEach(function(zavodnik){
+    soutezici.forEach(function(zavodnik,index){
 
         const radek =
         document.createElement("tr");
@@ -324,7 +320,9 @@ function vykresliTabulku(){
 <td><b>${zavodnik.nejlepsi}</b></td>
 
 <td>
-<button>Smazat</button>
+<button onclick="smazatSouteziciho(${index})">
+🗑️
+</button>
 </td>
 
 `;
@@ -334,9 +332,25 @@ function vykresliTabulku(){
     });
 
 }
-</script>
+function smazatSouteziciho(index){
 
-</div>
+    if(!confirm("Opravdu smazat soutěžícího?")){
+        return;
+    }
+
+    soutezici.splice(index,1);
+
+    soutezici.forEach(function(zavodnik,i){
+        zavodnik.poradi = i + 1;
+    });
+
+    poradi = soutezici.length + 1;
+
+    vykresliTabulku();
+
+}
+
+</script>
 
 </body>
 </html>
