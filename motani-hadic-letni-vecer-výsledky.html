@@ -137,15 +137,15 @@ return (ta[0]*60+ta[1]) - (tb[0]*60+tb[1]);
 
 sorted.forEach((z,i)=>{
 
-let cls = "";
+let medal = "";
 
-if(i===0) cls="first";
-else if(i===1) cls="second";
-else if(i===2) cls="third";
+if(i === 0) medal = "🥇 ";
+else if(i === 1) medal = "🥈 ";
+else if(i === 2) medal = "🥉 ";
 
 t.innerHTML += `
 <tr class="${cls}">
-<td>${i+1}</td>
+<td>${medal}${i+1}</td>
 <td>${z.prijmeni}</td>
 <td>${z.jmeno}</td>
 <td><b>${z.nejlepsi || "-"}</b></td>
