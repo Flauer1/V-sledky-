@@ -298,10 +298,10 @@ akce.appendChild(btnEdit);
 akce.appendChild(btnDelete);
 
         // Nejlepší
-        tr.insertCell().textContent = z.nejlepsi || "-";
+tr.insertCell().textContent = z.nejlepsi || "-";
 
-        // Pokus 1
-        tr.insertCell().textContent = "";
+// Pokus 1
+tr.insertCell().textContent = z.pokusy[0] || "";
 
  tbody.appendChild(tr);
 
@@ -317,7 +317,13 @@ function pridatPokus(id){
 
     if(cas.trim()==="") return;
 
-    alert("Další část bude čas ukládat. Zadal jsi: " + cas);
+    const zavodnik = soutezici.find(z => z.id === id);
+
+    zavodnik.pokusy.push(cas);
+
+    zavodnik.nejlepsi = zavodnik.pokusy[0];
+
+    vykresliTabulku();
 
 }
 
