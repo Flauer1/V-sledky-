@@ -227,10 +227,10 @@ nejlepsi:nej
 });
 
 };
-  window.editPokus = async function(id,index){
+ window.editPokus = async function(id,index){
 
 const z = data.find(s=>s.id===id);
-if(!z || !z.pokusy) return;
+if(!z || !Array.isArray(z.pokusy)) return;
 
 if(!z.pokusy[index]) return;
 
@@ -238,6 +238,9 @@ const novy = prompt("Upravit čas:", z.pokusy[index]);
 if(!novy) return;
 
 z.pokusy[index] = novy;
+
+// ochrana proti prázdnému poli
+if(z.pokusy.length === 0) return;
 
 // výpočet nejlepšího času
 let nej = z.pokusy[0];
