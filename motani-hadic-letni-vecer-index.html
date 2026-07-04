@@ -234,22 +234,28 @@ nejlepsi:nej
 });
 
 };
- window.editPokus = async function(id,index){
+window.editPokus = async function(id,index){
 
-const z = data.find(s=>s.id===id);
+// vezmeme aktuální data z Firebase snapshotu
+const z = data.find(s => s.id === id);
+
 if(!z || !Array.isArray(z.pokusy)) return;
 
-if(!z.pokusy[index]) return;
+const stare = z.pokusy[index];
+if(!stare) return;
 
-const novy = prompt("Upravit čas:", z.pokusy[index]);
+const novy = prompt("Upravit čas (HH:MM):", stare);
 if(!novy) return;
+
+// kontrola formátu
+if(!novy.includes(":")) {
+alert("Špatný formát času!");
+return;
+}
 
 z.pokusy[index] = novy;
 
-// ochrana proti prázdnému poli
-if(z.pokusy.length === 0) return;
-
-// výpočet nejlepšího času
+// přepočet nejlepšího času
 let nej = z.pokusy[0];
 
 for(let i=1;i<z.pokusy.length;i++){
