@@ -288,10 +288,42 @@ btnPlus.onclick = function(){
 const btnEdit = document.createElement("button");
 btnEdit.type = "button";
 btnEdit.textContent = "✏️";
+btnEdit.onclick = function(){
+
+    const novePrijmeni = prompt("Příjmení:", z.prijmeni);
+
+    if(novePrijmeni===null) return;
+
+    const noveJmeno = prompt("Jméno:", z.jmeno);
+
+    if(noveJmeno===null) return;
+
+    z.prijmeni = novePrijmeni.trim();
+
+    z.jmeno = noveJmeno.trim();
+
+    vykresliTabulku();
+
+};
 
 const btnDelete = document.createElement("button");
 btnDelete.type = "button";
 btnDelete.textContent = "🗑️";
+btnDelete.onclick = function(){
+
+    if(confirm("Opravdu smazat soutěžícího?")){
+
+        soutezici = soutezici.filter(function(z){
+
+            return z.id !== id;
+
+        });
+
+        vykresliTabulku();
+
+    }
+
+};
 
 akce.appendChild(btnPlus);
 akce.appendChild(btnEdit);
