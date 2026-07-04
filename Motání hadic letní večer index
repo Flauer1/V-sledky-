@@ -1,76 +1,90 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Motání hadic na čas</title>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f2f2f2;
-    margin:0;
-    padding:20px;
+background:#ececec;
+padding:20px;
 }
 
 .container{
-    max-width:1000px;
-    margin:auto;
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.2);
+max-width:1200px;
+margin:auto;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,.15);
 }
 
 h1{
-    text-align:center;
-    color:#c62828;
+text-align:center;
+color:#c62828;
+margin-bottom:5px;
 }
 
 h2{
-    text-align:center;
-    color:#666;
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+
+h3{
+margin:20px 0 10px;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
-}
-
-th,td{
-    border:1px solid #ccc;
-    padding:10px;
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
 }
 
 th{
-    background:#c62828;
-    color:white;
+background:#c62828;
+color:white;
+padding:10px;
+}
+
+td{
+border:1px solid #ccc;
+padding:8px;
 }
 
 input{
-    width:100%;
-    padding:8px;
-    box-sizing:border-box;
+width:100%;
+padding:8px;
 }
 
 button{
-    padding:10px 20px;
-    background:#2e7d32;
-    color:white;
-    border:none;
-    cursor:pointer;
-    border-radius:5px;
+padding:10px 18px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+background:#2e7d32;
+color:white;
 }
 
 button:hover{
-    background:#1b5e20;
+opacity:.9;
 }
 
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -94,42 +108,57 @@ button:hover{
 
 <tr>
 <td>Čas 1. pokusu</td>
-<td><input id="cas"></td>
+<td><input id="cas1"></td>
 </tr>
 
 <tr>
+
 <td></td>
+
 <td>
-<button type="button" id="pridatPokus">
+
+<button id="pridatPokus" type="button">
 ➕ Přidat další pokus
 </button>
+
 </td>
+
 </tr>
 
-<tbody id="dalsiPokusy"></tbody>
+<tbody id="pokusy">
+
+</tbody>
 
 <tr>
-<td colspan="2" style="text-align:center;">
-<button id="pridat">
-➕ Přidat soutěžícího
+
+<td></td>
+
+<td>
+
+<button id="ulozit">
+💾 Přidat soutěžícího
 </button>
+
 </td>
+
 </tr>
 
 </table>
-
 <h3>Seznam soutěžících</h3>
 
-<table>
+<table id="tabulka">
 
 <thead>
 
 <tr>
-<th>#</th>
+
+<th width="50">#</th>
 <th>Příjmení</th>
 <th>Jméno</th>
-<th>Pokusy</th>
-<th>Nejlepší čas</th>
+<th width="280">Pokusy</th>
+<th width="120">Nejlepší čas</th>
+<th width="90">Akce</th>
+
 </tr>
 
 </thead>
@@ -140,44 +169,174 @@ button:hover{
 
 </table>
 
-</div>
-
 <script>
+
 let poradi = 1;
 
-document.getElementById("pridat").addEventListener("click", function () {
+let pocetPokusu = 1;
 
-    const prijmeni = document.getElementById("prijmeni").value.trim();
-    const jmeno = document.getElementById("jmeno").value.trim();
-    const cas = document.getElementById("cas").value.trim();
+let soutezici = [];
 
-    if (prijmeni === "" || jmeno === "" || cas === "") {
-        alert("Vyplň příjmení, jméno i čas.");
-        return;
-    }
+function vytvorPolePokusu(){
+
+    pocetPokusu++;
 
     const radek = document.createElement("tr");
 
     radek.innerHTML = `
-    <td>${poradi}</td>
-    <td>${prijmeni}</td>
-    <td>${jmeno}</td>
-    <td>${cas}</td>
-    <td>${cas}</td>
-`;
+        <td>Čas ${pocetPokusu}. pokusu</td>
+        <td>
+            <input
+                class="cas"
+                placeholder="Zadej čas">
+        </td>
+    `;
 
-    document.getElementById("vysledky").appendChild(radek);
+    document
+        .getElementById("pokusy")
+        .appendChild(radek);
+
+}
+
+document
+.getElementById("pridatPokus")
+.addEventListener("click",vytvorPolePokusu);
+
+document
+.getElementById("ulozit")
+.addEventListener("click",ulozitSouteziciho);
+
+function ulozitSouteziciho(){
+
+    const prijmeni =
+    document.getElementById("prijmeni").value.trim();
+
+    const jmeno =
+    document.getElementById("jmeno").value.trim();
+
+    if(prijmeni==="" || jmeno===""){
+
+        alert("Vyplň příjmení a jméno.");
+
+        return;
+
+    }
+
+    let pokusy=[];
+
+    const prvni =
+    document.getElementById("cas1").value.trim();
+
+    if(prvni!==""){
+
+        pokusy.push(prvni);
+
+    }
+
+    document
+    .querySelectorAll(".cas")
+    .forEach(function(pole){
+
+        if(pole.value.trim()!==""){
+
+            pokusy.push(pole.value.trim());
+
+        }
+
+    });
+
+    if(pokusy.length===0){
+
+        alert("Zadej alespoň jeden čas.");
+
+        return;
+
+    }
+    let nejlepsi = pokusy[0];
+
+    pokusy.forEach(function(cas){
+
+        if(parseFloat(cas.replace(",", ".")) <
+           parseFloat(nejlepsi.replace(",", "."))){
+
+            nejlepsi = cas;
+
+        }
+
+    });
+
+    soutezici.push({
+
+        poradi: poradi,
+        prijmeni: prijmeni,
+        jmeno: jmeno,
+        pokusy: pokusy,
+        nejlepsi: nejlepsi
+
+    });
+
+    vykresliTabulku();
 
     poradi++;
 
-    document.getElementById("prijmeni").value = "";
-    document.getElementById("jmeno").value = "";
-    document.getElementById("cas").value = "";
+    document.getElementById("prijmeni").value="";
+    document.getElementById("jmeno").value="";
+    document.getElementById("cas1").value="";
+
+    document
+    .querySelectorAll(".cas")
+    .forEach(function(pole){
+
+        pole.parentElement.parentElement.remove();
+
+    });
+
+    document.getElementById("pokusy").innerHTML="";
+
+    pocetPokusu=1;
 
     document.getElementById("prijmeni").focus();
 
-});
+}
+
+function vykresliTabulku(){
+
+    const tbody =
+    document.getElementById("vysledky");
+
+    tbody.innerHTML="";
+
+    soutezici.forEach(function(zavodnik){
+
+        const radek =
+        document.createElement("tr");
+
+        radek.innerHTML=`
+
+<td>${zavodnik.poradi}</td>
+
+<td>${zavodnik.prijmeni}</td>
+
+<td>${zavodnik.jmeno}</td>
+
+<td>${zavodnik.pokusy.join("<br>")}</td>
+
+<td><b>${zavodnik.nejlepsi}</b></td>
+
+<td>
+<button>Smazat</button>
+</td>
+
+`;
+
+        tbody.appendChild(radek);
+
+    });
+
+}
 </script>
+
+</div>
 
 </body>
 </html>
