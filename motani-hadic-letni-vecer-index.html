@@ -374,32 +374,32 @@ function pridatPokus(id){
     const zavodnik = soutezici.find(z => z.id === id);
 
     zavodnik.pokusy.push(cas);
- if(zavodnik.pokusy.length > maxPokusu){
 
-    maxPokusu = zavodnik.pokusy.length;
+    // nový sloupec Pokus X
+    if(zavodnik.pokusy.length > maxPokusu){
 
-    const hlavicka = document.getElementById("hlavicka");
+        maxPokusu = zavodnik.pokusy.length;
 
-    const th = document.createElement("th");
+        const th = document.createElement("th");
+        th.textContent = "Pokus " + maxPokusu;
 
-    th.textContent = "Pokus " + maxPokusu;
+        document.getElementById("hlavicka").appendChild(th);
+    }
 
-    hlavicka.appendChild(th);
-
-}
-
+    // výpočet nejlepšího času (správně)
     zavodnik.nejlepsi = zavodnik.pokusy.reduce(function(nej,cas){
 
-    const a = parseFloat(nej.replace(":","."));
-    const b = parseFloat(cas.replace(":","."));
+        const [m1,s1] = nej.split(":").map(Number);
+        const [m2,s2] = cas.split(":").map(Number);
 
-    return b < a ? cas : nej;
+        return (m2*60+s2) < (m1*60+s1) ? cas : nej;
 
-});
+    });
 
     vykresliTabulku();
-
 }
+
+
 function upravitPokus(id,index){
 
     const zavodnik = soutezici.find(z=>z.id===id);
