@@ -278,11 +278,24 @@ function vykresliTabulku() {
         // Akce
         const akce = tr.insertCell();
 
-        akce.innerHTML = `
-            <button type="button">➕</button>
-            <button type="button">✏️</button>
-            <button type="button">🗑️</button>
-        `;
+       const btnPlus = document.createElement("button");
+btnPlus.type = "button";
+btnPlus.textContent = "➕";
+btnPlus.onclick = function(){
+    pridatPokus(z.id);
+};
+
+const btnEdit = document.createElement("button");
+btnEdit.type = "button";
+btnEdit.textContent = "✏️";
+
+const btnDelete = document.createElement("button");
+btnDelete.type = "button";
+btnDelete.textContent = "🗑️";
+
+akce.appendChild(btnPlus);
+akce.appendChild(btnEdit);
+akce.appendChild(btnDelete);
 
         // Nejlepší
         tr.insertCell().textContent = z.nejlepsi || "-";
@@ -290,11 +303,24 @@ function vykresliTabulku() {
         // Pokus 1
         tr.insertCell().textContent = "";
 
-        tbody.appendChild(tr);
+ tbody.appendChild(tr);
 
     });
 
 }
+
+function pridatPokus(id){
+
+    const cas = prompt("Zadej čas (např. 15:23)");
+
+    if(cas===null) return;
+
+    if(cas.trim()==="") return;
+
+    alert("Další část bude čas ukládat. Zadal jsi: " + cas);
+
+}
+
 </script>
 
 </body>
