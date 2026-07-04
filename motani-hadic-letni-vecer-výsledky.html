@@ -139,39 +139,40 @@ function render(){
 const t = document.getElementById("tab");
 t.innerHTML = "";
 
-// seřazení podle času
+// 🛡️ OCHRANA
+if(!data || data.length === 0){
+t.innerHTML = `
+<tr><td colspan="4">Žádná data</td></tr>
+`;
+return;
+}
+
+// kopie dat
 const sorted = [...data].sort((a,b)=>{
 
-const ta = a.nejlepsi ? a.nejlepsi.split(":").map(Number) : [99,99];
-const tb = b.nejlepsi ? b.nejlepsi.split(":").map(Number) : [99,99];
+const aTime = (a && a.nejlepsi) ? a.nejlepsi.split(":") : ["99","99"];
+const bTime = (b && b.nejlepsi) ? b.nejlepsi.split(":") : ["99","99"];
 
-return (ta[0]*60+ta[1]) - (tb[0]*60+tb[1]);
+const aMin = (+aTime[0])*60 + (+aTime[1]);
+const bMin = (+bTime[0])*60 + (+bTime[1]);
+
+return aMin - bMin;
 });
 
 sorted.forEach((z,i)=>{
 
-// 🏅 MEDAILE
 let medal = "";
 let cls = "";
 
-if(i === 0){
-medal = "🥇 ";
-cls = "first";
-}
-else if(i === 1){
-medal = "🥈 ";
-cls = "second";
-}
-else if(i === 2){
-medal = "🥉 ";
-cls = "third";
-}
+if(i === 0){ medal = "🥇 "; cls="first"; }
+else if(i === 1){ medal = "🥈 "; cls="second"; }
+else if(i === 2){ medal = "🥉 "; cls="third"; }
 
 t.innerHTML += `
 <tr class="${cls}">
 <td>${medal}${i+1}</td>
-<td>${z.prijmeni}</td>
-<td>${z.jmeno}</td>
+<td>${z.prijmeni || "-"}</td>
+<td>${z.jmeno || "-"}</td>
 <td><b>${z.nejlepsi || "-"}</b></td>
 </tr>
 `;
