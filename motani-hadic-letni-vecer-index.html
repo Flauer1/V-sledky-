@@ -169,7 +169,15 @@ document.getElementById("jmeno").value="";
 
 /* ================= DELETE ================= */
 window.smaz = async function(id){
+
+const potvrdit = confirm("Opravdu chceš smazat tohoto soutěžícího?");
+
+if(!potvrdit){
+    return;
+}
+
 await deleteDoc(doc(db,"motani_hadic",id));
+
 };
 
 /* ================= EDIT ================= */
