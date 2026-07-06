@@ -119,21 +119,24 @@ const col = collection(db, "motani_hadic");
 let data = [];
 function validTime(t){
 
-// musí mít :
-if(!t.includes(":")) return false;
+    if(!t.includes(":")) return false;
 
-const [m,s] = t.split(":");
+    const casti = t.split(":");
 
-if(!m || !s) return false;
+    if(casti.length !== 2) return false;
 
-// musí být čísla
-if(isNaN(m) || isNaN(s)) return false;
+    const sekundy = Number(casti[0]);
+    const setiny = Number(casti[1]);
 
-// rozsah
-if(m < 0 || m > 59) return false;
-if(s < 0 || s > 59) return false;
+    if(isNaN(sekundy) || isNaN(setiny)) return false;
 
-return true;
+    // sekundy mohou být libovolně vysoké
+    if(sekundy < 0) return false;
+
+    // setiny musí být 00–99
+    if(setiny < 0 || setiny > 99) return false;
+
+    return true;
 }
 /* ================= REALTIME ================= */
 onSnapshot(col, (snap) => {
